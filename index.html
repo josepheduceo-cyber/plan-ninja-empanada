@@ -660,64 +660,243 @@ html, body {
     .combos-bg-fx { animation: none; }
 }
 /* ---- CARRITO PAGE ---- */
-.cart-empty {
-    text-align: center; padding: 60px 20px;
+#page-carrito { position: relative; overflow: hidden; }
+#page-carrito .page-header {
+    position: relative; overflow: hidden;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(240,192,64,0.2), transparent 42%),
+        radial-gradient(circle at 4% 0%, rgba(157,93,212,0.28), transparent 45%),
+        var(--surface-2);
 }
-.empty-icon { font-size: 4rem; margin-bottom: 16px; }
-.cart-empty h3 { font-size: 1.3rem; margin-bottom: 8px; }
-.cart-empty p { color: var(--text-muted); margin-bottom: 24px; }
-.cart-items { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.cart-item {
-    background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 14px;
-    display: flex; align-items: center; gap: 12px;
+#page-carrito .page-header::after {
+    content: '🥟';
+    position: absolute; right: -8px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 7rem; opacity: 0.07; pointer-events: none;
+    animation: ninjaFloat 5s ease-in-out infinite;
 }
-.cart-item-name { flex: 1; font-weight: 700; font-size: 0.95rem; }
-.cart-item-price { color: var(--gold); font-weight: 800; font-size: 1rem; }
-.cart-item-remove {
-    background: rgba(200,50,50,0.2); border: 1px solid rgba(200,50,50,0.4);
-    color: #f88; padding: 4px 10px; border-radius: 50px;
-    font-size: 0.75rem; cursor: pointer; font-weight: 700;
-}
-.cart-item-qty {
-    display: flex; align-items: center; gap: 8px;
-}
-.qty-btn {
+.page-header-sub {
+    display: inline-block; margin-top: 10px;
+    font-size: 0.85rem; font-weight: 700; color: var(--purple-light);
     background: var(--surface); border: 1px solid var(--border);
-    color: var(--white); width: 28px; height: 28px; border-radius: 50%;
-    font-size: 1rem; cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
+    padding: 4px 14px; border-radius: 50px;
 }
-.qty-val { font-weight: 700; min-width: 20px; text-align: center; }
+.cart-empty {
+    text-align: center; padding: 54px 20px 60px;
+}
+.empty-icon {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 118px; height: 118px; margin-bottom: 18px;
+    font-size: 4.2rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 36%, rgba(240,192,64,0.3), rgba(123,63,196,0.3) 58%, transparent 80%);
+    border: 1.5px dashed rgba(240,192,64,0.55);
+    box-shadow: 0 0 36px rgba(240,192,64,0.28), inset 0 0 28px rgba(157,93,212,0.3);
+    animation: emptyFloat 3.4s ease-in-out infinite;
+}
+.empty-icon::after {
+    content: '';
+    position: absolute; inset: -14px; border-radius: 50%;
+    border: 1px dashed rgba(157,93,212,0.4);
+    animation: emptyRing 16s linear infinite;
+}
+@keyframes emptyFloat {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-12px) rotate(4deg); }
+}
+@keyframes emptyRing { to { transform: rotate(360deg); } }
+.cart-empty h3 {
+    font-family: 'Cinzel', serif; font-size: 1.3rem; margin-bottom: 8px; color: var(--white);
+}
+.cart-empty p {
+    color: var(--text-muted); margin-bottom: 24px;
+    max-width: 300px; margin-left: auto; margin-right: auto; line-height: 1.6;
+}
+.cart-empty .btn-primary { box-shadow: 0 0 24px rgba(123,63,196,0.45); }
+.cart-items { padding: 18px 16px 6px; display: flex; flex-direction: column; gap: 14px; }
+.cart-item {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(45,21,87,0.85), rgba(74,32,128,0.55));
+    border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 46px 14px 14px;
+    display: flex; align-items: center; gap: 14px;
+    animation: cartIn 0.4s cubic-bezier(.2,.8,.3,1) both;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+}
+@keyframes cartIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.cart-item:hover {
+    border-color: var(--purple-accent);
+    box-shadow: 0 18px 44px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.07);
+    transform: translateY(-1px);
+}
+.cart-item::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.09) 44%, transparent 72%);
+    transform: translateX(-130%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+.cart-item:hover::before { transform: translateX(130%); }
+.cart-item.premium {
+    border-color: rgba(240,192,64,0.55);
+    background:
+        radial-gradient(circle at 0% 0%, rgba(240,192,64,0.2), transparent 55%),
+        linear-gradient(135deg, rgba(45,21,87,0.9), rgba(60,45,15,0.5));
+    box-shadow: 0 0 24px rgba(240,192,64,0.16), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.cart-item-icon {
+    width: 58px; height: 58px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    border-radius: 14px;
+    background: radial-gradient(circle at 50% 28%, rgba(176,106,228,0.3), rgba(0,0,0,0.22) 74%);
+    border: 1px solid var(--border);
+}
+.cart-item.premium .cart-item-icon {
+    background: radial-gradient(circle at 50% 28%, rgba(240,192,64,0.38), rgba(0,0,0,0.22) 74%);
+    border-color: rgba(240,192,64,0.55);
+    box-shadow: 0 0 16px rgba(240,192,64,0.25);
+}
+.cart-item-body { flex: 1; min-width: 0; }
+.cart-item-name {
+    font-weight: 800; font-size: 0.98rem; color: var(--white);
+    line-height: 1.3;
+}
+.cart-item.premium .cart-item-name { color: var(--gold-light); text-shadow: 0 0 14px rgba(240,192,64,0.3); }
+.cart-item-sub {
+    font-size: 0.72rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.03em;
+    text-transform: uppercase; margin-top: 3px;
+}
+.cart-item-right { flex-shrink: 0; text-align: right; }
+.cart-item-price {
+    color: var(--gold); font-weight: 900; font-size: 1.05rem;
+    white-space: nowrap; text-shadow: 0 0 14px rgba(240,192,64,0.3);
+}
+.qty-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+.qty-btn {
+    width: 30px; height: 30px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--white); border-radius: 50%;
+    font-size: 1.05rem; font-weight: 800; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; line-height: 1;
+    transition: all 0.2s;
+}
+.qty-btn:hover { background: var(--purple-accent); border-color: var(--purple-accent); transform: scale(1.12); }
+.qty-btn.minus:hover { background: rgba(220,60,60,0.85); border-color: rgba(255,110,110,0.8); }
+.qty-btn:active { transform: scale(0.9); }
+.qty-val {
+    font-weight: 800; min-width: 22px; text-align: center;
+    font-size: 1rem; color: var(--white);
+}
+.cart-item-subtotal { font-size: 0.74rem; color: var(--text-muted); font-weight: 800; margin-top: 4px; }
+.cart-item-remove {
+    position: absolute; top: 10px; right: 10px;
+    width: 27px; height: 27px;
+    background: rgba(200,50,50,0.18); border: 1px solid rgba(200,50,50,0.45);
+    color: #ff9f9f; border-radius: 50%;
+    font-size: 0.78rem; cursor: pointer; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+}
+.cart-item-remove:hover { background: rgba(220,40,40,0.85); color: #fff; transform: rotate(90deg); }
 .cart-summary {
-    margin: 0 16px 20px;
-    background: var(--surface-2); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    margin: 8px 16px 20px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(240,192,64,0.16), transparent 45%),
+        linear-gradient(145deg, rgba(45,21,87,0.95), rgba(26,10,46,0.92));
+    border: 1px solid rgba(157,93,212,0.35);
     border-radius: var(--radius); padding: 20px;
 }
+.cart-summary::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--purple-accent), var(--gold), var(--purple-accent));
+    background-size: 200% 100%;
+    animation: summaryGrad 4s linear infinite;
+}
+@keyframes summaryGrad { to { background-position: -200% 0; } }
+.summary-title {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Cinzel', serif; font-size: 1.02rem; font-weight: 700; color: var(--white);
+    margin-bottom: 10px;
+}
+.summary-rows { border-top: 1px dashed var(--border); padding-top: 6px; }
 .summary-row {
-    display: flex; justify-content: space-between;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    font-size: 0.95rem;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+    font-size: 0.95rem; color: var(--white-dim);
 }
+.summary-row span:last-child { font-weight: 800; color: var(--white); }
 .summary-row.total {
-    border-bottom: none; margin-top: 8px;
-    font-size: 1.2rem; font-weight: 800; color: var(--gold);
+    border-bottom: none; border-top: 1px dashed var(--border);
+    margin-top: 6px; padding-top: 14px;
+    font-size: 1.1rem; font-weight: 800;
 }
-.free-delivery { color: #4caf50; font-weight: 700; }
+.summary-row.total span:last-child {
+    font-size: 1.45rem; font-weight: 900; color: var(--gold);
+    background: linear-gradient(90deg, #f0c040, #fff3b0, #f0c040);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    filter: drop-shadow(0 0 12px rgba(240,192,64,0.45));
+    animation: goldShine 5s linear infinite;
+}
+.free-delivery { color: #6fd97a; font-weight: 800; }
+.delivery-badge {
+    display: inline-block;
+    background: rgba(76,175,80,0.15); border: 1px solid #4caf50;
+    padding: 3px 12px; border-radius: 50px; font-size: 0.78rem;
+    color: #6fd97a; font-weight: 800;
+}
 .btn-checkout {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, #25d366, #1da851);
+    position: relative; overflow: hidden;
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #25d366, #128c4a);
     color: white; border: none; border-radius: 50px;
-    font-size: 1rem; font-weight: 800; cursor: pointer;
-    margin-top: 16px; transition: transform 0.2s;
+    font-size: 1.02rem; font-weight: 900; cursor: pointer;
+    margin-top: 18px; letter-spacing: 0.01em;
+    box-shadow: 0 10px 26px rgba(37,211,102,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-.btn-checkout:hover { transform: scale(1.02); }
+.btn-checkout::after {
+    content: '';
+    position: absolute; top: 0; left: -60%;
+    width: 42%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: skewX(-20deg);
+    animation: checkoutSheen 3.4s ease-in-out infinite;
+}
+@keyframes checkoutSheen {
+    0%, 55% { left: -60%; }
+    85%, 100% { left: 135%; }
+}
+.btn-checkout:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 16px 38px rgba(37,211,102,0.5), inset 0 1px 0 rgba(255,255,255,0.3); }
+.btn-checkout:active { transform: scale(0.98); }
 .btn-clear {
     width: 100%; padding: 10px;
-    background: transparent; color: #f88;
+    background: transparent; color: #ff9b9b;
     border: 1px solid rgba(200,50,50,0.4); border-radius: 50px;
-    font-size: 0.85rem; font-weight: 700; cursor: pointer;
-    margin-top: 10px;
+    font-size: 0.85rem; font-weight: 800; cursor: pointer;
+    margin-top: 10px; letter-spacing: 0.02em; transition: all 0.2s;
+}
+.btn-clear:hover { background: rgba(220,60,60,0.14); color: #ff6b6b; }
+@media (max-width: 420px) {
+    .cart-item { flex-wrap: wrap; padding-right: 14px; gap: 10px; }
+    .cart-item-right { width: 100%; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+    .cart-item-icon { width: 50px; height: 50px; font-size: 1.5rem; }
+    .qty-row { justify-content: flex-start; margin-top: 0; }
+    .cart-item-subtotal { margin: 0 0 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cart-item, .empty-icon, .empty-icon::after, .cart-summary::before,
+    .summary-row.total span:last-child, .btn-checkout::after,
+    #page-carrito .page-header::after { animation: none !important; }
 }
 /* ---- PEDIDO ---- */
 .tracking-card {
@@ -735,6 +914,23 @@ html, body {
     text-decoration: none; transition: transform 0.2s;
 }
 .btn-wa:hover { transform: scale(1.03); }
+.tracking-wa { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 6px; }
+.checkout-contacts {
+    margin-top: 14px; padding: 14px;
+    border: 1px dashed rgba(37,211,102,0.5);
+    border-radius: var(--radius-sm);
+    background: rgba(37,211,102,0.06);
+}
+.checkout-pick { color: var(--white-dim); font-size: 0.85rem; font-weight: 800; margin-bottom: 12px; text-align: center; }
+.checkout-list { display: grid; gap: 8px; }
+.checkout-wa {
+    display: block; width: 100%;
+    background: transparent; border: 2px solid #25d366; color: #25d366;
+    padding: 11px; border-radius: 50px;
+    font-weight: 800; font-size: 0.9rem; cursor: pointer;
+    transition: all 0.2s;
+}
+.checkout-wa:hover { background: #25d366; color: white; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,211,102,0.3); }
 .tracking-steps { display: flex; flex-direction: column; gap: 4px; }
 .step {
     display: flex; align-items: flex-start; gap: 14px;
@@ -747,50 +943,214 @@ html, body {
 .step strong { display: block; font-size: 0.95rem; }
 .step p { color: var(--text-muted); font-size: 0.82rem; margin-top: 2px; }
 /* ---- CONTACTO ---- */
+#page-contacto { position: relative; overflow: hidden; }
+#page-contacto .page-header,
+#page-contacto .contact-grid,
+#page-contacto .map-placeholder { position: relative; z-index: 1; }
+#page-contacto .page-header {
+    position: relative; overflow: hidden;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(240,192,64,0.2), transparent 42%),
+        radial-gradient(circle at 10% 0%, rgba(157,93,212,0.3), transparent 48%),
+        var(--surface-2);
+}
+/* ---- Aire ambiental: shurikens girando + slashes ---- */
+.shuriken-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.shuriken {
+    position: absolute;
+    width: 44px; height: 44px;
+    clip-path: polygon(40% 0, 60% 0, 62% 38%, 100% 40%, 100% 60%, 62% 62%, 60% 100%, 40% 100%, 38% 62%, 0 60%, 0 40%, 38% 38%);
+    background: linear-gradient(135deg, var(--gold), rgba(176,106,228,0.8));
+    opacity: 0.14;
+    animation: shurikenSpin 14s linear infinite;
+    filter: drop-shadow(0 0 6px rgba(240,192,64,0.4));
+}
+.shuriken.gold { background: linear-gradient(135deg, #fff3b0, #c9950f); }
+.shuriken.violet { background: linear-gradient(135deg, #c39de8, #4a2080); }
+@keyframes shurikenSpin { to { transform: rotate(360deg); } }
+.shuriken.s1 { top: 150px; left: 5%; width: 30px; height: 30px; }
+.shuriken.s2 { top: 40%; right: 4%; width: 22px; height: 22px; animation-duration: 9s; animation-direction: reverse; }
+.shuriken.s3 { bottom: 26%; left: 12%; width: 18px; height: 18px; animation-duration: 11s; }
+.shuriken.s4 { top: 62%; right: 10%; width: 26px; height: 26px; animation-duration: 16s; animation-direction: reverse; }
+.shuriken.s5 { top: 26%; left: 24%; width: 15px; height: 15px; animation-duration: 8s; }
+.shuriken.s6 { bottom: 6%; right: 24%; width: 20px; height: 20px; animation-duration: 13s; }
+.shuriken.hdr-s { top: 50%; right: 14px; width: 34px; height: 34px; opacity: 0.5; animation-duration: 8s; transform: translateY(-50%); }
+.contact-slash {
+    position: absolute; height: 2px; width: 120px;
+    background: linear-gradient(90deg, transparent, rgba(240,192,64,0.6), transparent);
+    opacity: 0; pointer-events: none;
+    animation: contactSlash 7s ease-in infinite;
+}
+.contact-slash.csl1 { top: 18%; right: 12%; transform: rotate(38deg); }
+.contact-slash.csl2 { top: 72%; left: 6%; transform: rotate(-30deg); animation-delay: 3s; }
+@keyframes contactSlash {
+    0%, 70%, 100% { opacity: 0; }
+    72% { opacity: 0.8; }
+    76% { opacity: 0; }
+}
+/* ---- Grilla de tarjetas ---- */
 .contact-grid {
     padding: 20px 16px;
-    display: grid; gap: 14px;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 .contact-card {
-    background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 22px; text-align: center;
+    position: relative; overflow: hidden; text-align: center;
+    background:
+        radial-gradient(circle at 50% -30%, rgba(176,106,228,0.4), transparent 62%),
+        linear-gradient(165deg, rgba(45,21,87,0.92), rgba(26,10,46,0.97));
+    border: 1px solid rgba(157,93,212,0.42);
+    border-radius: var(--radius); padding: 26px 20px 20px;
+    animation: contactIn 0.5s cubic-bezier(.2,.8,.3,1) both;
 }
-.contact-icon { font-size: 2.5rem; margin-bottom: 10px; }
-.contact-card h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); margin-bottom: 8px; }
-.contact-val { font-size: 0.95rem; line-height: 1.5; color: var(--white-dim); margin-bottom: 14px; }
-.contact-numbers { display: grid; gap: 4px; }
-.contact-numbers a { color: var(--white-dim); text-decoration: none; font-weight: 700; }
-.contact-numbers a:hover { color: var(--gold); }
+.contact-grid .contact-card:nth-child(1) { animation-delay: 0.05s; }
+.contact-grid .contact-card:nth-child(2) { animation-delay: 0.15s; }
+.contact-grid .contact-card:nth-child(3) { animation-delay: 0.25s; }
+@keyframes contactIn {
+    from { opacity: 0; transform: translateY(22px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.contact-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.85;
+}
+.card-corner {
+    position: absolute; width: 12px; height: 12px; opacity: 0.75;
+    pointer-events: none;
+}
+.card-corner.c-tl { top: 10px; left: 10px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); border-top-left-radius: 4px; }
+.card-corner.c-br { bottom: 10px; right: 10px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); border-bottom-right-radius: 4px; }
+.contact-icon-chip {
+    position: relative;
+    width: 74px; height: 74px; margin: 0 auto 12px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, rgba(240,192,64,0.28), rgba(123,63,196,0.36) 62%, rgba(0,0,0,0.35) 100%);
+    border: 1.5px dashed rgba(240,192,64,0.6);
+    box-shadow: 0 0 26px rgba(157,93,212,0.4), inset 0 0 20px rgba(240,192,64,0.15);
+}
+.contact-icon-chip::before,
+.contact-icon-chip::after {
+    content: '';
+    position: absolute; border-radius: 50%; pointer-events: none;
+}
+.contact-icon-chip::before {
+    inset: -9px;
+    border: 1px solid rgba(157,93,212,0.45);
+    animation: contactRing 14s linear infinite;
+}
+.contact-icon-chip::after {
+    inset: -4px;
+    border: 1px dashed rgba(240,192,64,0.35);
+    animation: contactRing 20s linear infinite reverse;
+}
+@keyframes contactRing { to { transform: rotate(360deg); } }
+.contact-icon-chip .contact-icon { font-size: 1.95rem; position: relative; z-index: 1; margin: 0; }
+.contact-card h3 {
+    font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold);
+    margin-bottom: 10px; letter-spacing: 0.02em;
+}
+.contact-val { font-size: 0.95rem; line-height: 1.55; color: var(--white-dim); margin-bottom: 14px; }
+.contact-numbers { display: grid; gap: 5px; justify-items: center; }
+.contact-numbers a {
+    color: var(--white-dim); text-decoration: none; font-weight: 700;
+    transition: all 0.2s;
+}
+.contact-numbers a:hover { color: var(--gold); transform: translateX(3px); text-shadow: 0 0 12px rgba(240,192,64,0.5); }
 .contact-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
-.contact-actions .btn-wa { margin: 0; }
-.contact-time { font-size: 1.4rem; font-weight: 800; color: var(--gold); }
-.status-badge {
-    display: inline-block; padding: 6px 16px; border-radius: 50px;
-    font-size: 0.82rem; font-weight: 700; margin-top: 10px;
+.contact-actions .btn-wa { margin: 0; background: linear-gradient(135deg, #25d366, #128c4a); box-shadow: 0 8px 18px rgba(37,211,102,0.3); position: relative; overflow: hidden; }
+.contact-actions .btn-wa::after,
+.map-link::after {
+    content: '';
+    position: absolute; top: 0; left: -70%; width: 36%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
 }
-.status-open { background: rgba(76,175,80,0.2); color: #4caf50; border: 1px solid #4caf50; }
-.status-closed { background: rgba(200,50,50,0.2); color: #f66; border: 1px solid #f66; }
+.contact-actions .btn-wa:hover::after,
+.map-link:hover::after { left: 135%; }
+.contact-time {
+    font-size: 1.45rem; font-weight: 900; color: var(--gold);
+    background: linear-gradient(90deg, #f0c040, #fff3b0, #f0c040);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    filter: drop-shadow(0 0 12px rgba(240,192,64,0.35));
+    animation: goldShine 5s linear infinite;
+}
+.status-badge {
+    display: inline-block; padding: 7px 18px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 800; margin-top: 12px;
+    animation: statusPulse 2.2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+    50% { transform: scale(1.06); box-shadow: 0 0 18px currentColor; }
+}
+.status-open { background: rgba(76,175,80,0.18); color: #4caf50; border: 1px solid #4caf50; }
+.status-closed { background: rgba(200,50,50,0.18); color: #ff6666; border: 1px solid #ff6666; }
 .map-placeholder {
+    position: relative; overflow: hidden;
     margin: 0 16px 24px;
     background-image:
-        linear-gradient(100deg, rgba(26,10,46,0.97) 0%, rgba(45,21,87,0.92) 58%, rgba(45,21,87,0.62) 100%),
+        linear-gradient(100deg, rgba(26,10,46,0.96) 0%, rgba(45,21,87,0.9) 58%, rgba(45,21,87,0.55) 100%),
         url('assets/tres-sabores.png.png');
     background-position: center, right 7% center;
     background-repeat: no-repeat;
     background-size: cover, min(430px, 42vw);
-    border: 1px solid var(--border); border-radius: var(--radius);
-    min-height: 200px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(157,93,212,0.4); border-radius: var(--radius);
+    min-height: 230px; display: flex; align-items: center; justify-content: center;
 }
-.map-inner { text-align: center; padding: 32px; position: relative; z-index: 1; }
-.map-pin { font-size: 3rem; display: block; margin-bottom: 12px; }
+.map-placeholder::before {
+    content: ''; position: absolute; top: 12px; left: 12px;
+    width: 26px; height: 26px;
+    border-top: 2px solid var(--gold); border-left: 2px solid var(--gold);
+    border-top-left-radius: 8px; opacity: 0.85; pointer-events: none;
+}
+.map-placeholder::after {
+    content: ''; position: absolute; bottom: 12px; right: 12px;
+    width: 26px; height: 26px;
+    border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold);
+    border-bottom-right-radius: 8px; opacity: 0.85; pointer-events: none;
+}
+.map-slash {
+    position: absolute; height: 2px; width: 130px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4; pointer-events: none;
+}
+.map-slash.sl-t { top: 16%; right: 8%; transform: rotate(38deg); }
+.map-slash.sl-b { bottom: 14%; left: 6%; transform: rotate(-32deg); }
+.map-inner { text-align: center; padding: 34px 32px; position: relative; z-index: 1; }
+.map-pin-wrap {
+    position: relative; width: 70px; height: 70px; margin: 0 auto 10px;
+    display: grid; place-items: center;
+}
+.map-pin-wrap::before {
+    content: ''; position: absolute; width: 86px; height: 86px;
+    border-radius: 50%;
+    border: 1px dashed rgba(240,192,64,0.5);
+    animation: ringSpin 10s linear infinite;
+}
+@keyframes ringSpin { to { transform: rotate(360deg); } }
+.map-pin {
+    font-size: 3rem; display: block; position: relative; z-index: 1;
+    filter: drop-shadow(0 0 12px rgba(240,192,64,0.6));
+    animation: mapPin 2.2s ease-in-out infinite;
+}
+@keyframes mapPin { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
 .map-inner h3 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.1rem; }
 .map-inner p { color: var(--text-muted); margin-top: 4px; }
-.map-link { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; }
+.map-link { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #25d366, #128c4a); box-shadow: 0 8px 18px rgba(37,211,102,0.3); position: relative; overflow: hidden; }
 @media (max-width: 640px) {
     .map-placeholder { background-position: center, center 92%; background-size: cover, min(310px, 76vw); }
-    .map-inner { padding: 28px 18px 180px; }
-    .contact-time { font-size: 1.12rem; }
+    .map-inner { padding: 30px 18px 190px; }
+    .contact-time { font-size: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .shuriken, .contact-slash, .contact-icon-chip::before,
+    .contact-icon-chip::after, .contact-card, .status-badge, .map-pin,
+    .map-pin-wrap::before, .contact-time, #page-contacto .page-header { animation: none !important; }
 }
 /* ---- NOSOTROS ---- */
 .about-hero {
@@ -1092,6 +1452,398 @@ body {
         justify-content: center;
     }
 }
+/* =====================================================
+   LÍNEA PREMIUM DORADA · S/. 5.00
+   Efecto distintivo: borde dorado giratorio, aura con
+   anillo rúnico, destellos ascendentes y brillo de barrido
+===================================================== */
+@property --gold-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+:root {
+    --gold-light: #ffe89a;
+    --gold-grad: linear-gradient(135deg, #c9950f 0%, #f0c040 45%, #ffe89a 100%);
+    --gold-text: linear-gradient(90deg, #f0c040, #fff3b0 50%, #f0c040);
+}
+/* Etiqueta de línea (Clásica / Premium) */
+.line-pill {
+    display: table;
+    margin: -8px auto 22px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--purple-light);
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+.line-pill.gold {
+    color: var(--gold-light);
+    background: rgba(240,192,64,0.1);
+    border-color: rgba(240,192,64,0.55);
+    box-shadow: 0 0 18px rgba(240,192,64,0.2);
+}
+/* Hero: dos etiquetas de precio */
+.hero-price-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.hero-price-tag.premium-tag {
+    background: transparent;
+    color: var(--gold-light);
+    border: 1.5px solid var(--gold);
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(240,192,64,0.3);
+    animation: tagGlow 2.8s ease-in-out infinite;
+    transition: transform 0.2s;
+}
+.hero-price-tag.premium-tag:hover { transform: translateY(-2px); }
+@keyframes tagGlow {
+    0%, 100% { box-shadow: 0 0 10px rgba(240,192,64,0.2); }
+    50% { box-shadow: 0 0 24px rgba(240,192,64,0.55); }
+}
+@media (max-width: 768px) { .hero-price-row { justify-content: center; } }
+
+/* ---- Sección premium ---- */
+.premium-section {
+    position: relative;
+    overflow: hidden;
+    padding: 40px 16px 36px;
+    scroll-margin-top: 70px;
+    border-top: 1px solid rgba(240,192,64,0.4);
+    border-bottom: 1px solid rgba(240,192,64,0.4);
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(240,192,64,0.22), transparent 55%),
+        radial-gradient(ellipse at 12% 100%, rgba(176,106,228,0.2), transparent 45%),
+        radial-gradient(ellipse at 90% 80%, rgba(240,192,64,0.08), transparent 40%),
+        linear-gradient(180deg, rgba(20,8,36,0.55), rgba(48,24,8,0.32) 50%, rgba(20,8,36,0.55));
+}
+.premium-section > * { position: relative; z-index: 1; }
+.premium-section::after {
+    content: '';
+    position: absolute; inset: 0; z-index: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(240,192,64,0.9) 0 1px, transparent 2.2px),
+        radial-gradient(circle, rgba(255,232,154,0.7) 0 1px, transparent 2px);
+    background-size: 90px 90px, 140px 140px;
+    background-position: 0 0, 40px 60px;
+    opacity: 0.5;
+    animation: embersRise 16s linear infinite;
+}
+@keyframes embersRise {
+    from { background-position: 0 0, 40px 60px; }
+    to { background-position: 30px -180px, 10px -280px; }
+}
+.premium-header { text-align: center; margin-bottom: 4px; }
+.premium-crown-row {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    margin-bottom: 8px;
+}
+.gold-line {
+    height: 2px; width: min(120px, 26vw);
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    filter: drop-shadow(0 0 6px rgba(240,192,64,0.8));
+}
+.premium-crown {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 12px rgba(240,192,64,0.8));
+    animation: crownFloat 3s ease-in-out infinite;
+}
+@keyframes crownFloat {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-5px) rotate(4deg); }
+}
+.premium-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem; font-weight: 900;
+    margin-bottom: 14px;
+    background: linear-gradient(90deg, #c9950f, #fff3b0, #f0c040, #fff3b0, #c9950f);
+    background-size: 250% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: goldShine 5s linear infinite;
+    filter: drop-shadow(0 0 14px rgba(240,192,64,0.35));
+}
+@keyframes goldShine { from { background-position: 0% 0; } to { background-position: 250% 0; } }
+
+/* ---- Tarjeta premium ---- */
+.product-card.premium {
+    border: 1px solid rgba(240,192,64,0.5);
+    background:
+        radial-gradient(circle at 50% 0%, rgba(240,192,64,0.2), transparent 55%),
+        linear-gradient(160deg, rgba(74,32,128,0.92), rgba(28,10,56,0.97));
+    box-shadow: 0 18px 45px rgba(0,0,0,0.32), 0 0 28px rgba(240,192,64,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.product-card.premium:hover {
+    border-color: var(--gold);
+    box-shadow: 0 14px 50px rgba(0,0,0,0.4), 0 0 44px rgba(240,192,64,0.38), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+/* Borde dorado que gira alrededor de la tarjeta */
+.product-card.premium::after,
+.menu-card.premium::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    pointer-events: none;
+    background: conic-gradient(from var(--gold-angle), transparent 0deg, #f0c040 45deg, #fff8d6 85deg, #f0c040 125deg, transparent 190deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: goldSpin 5s linear infinite;
+}
+@keyframes goldSpin { to { --gold-angle: 360deg; } }
+/* Brillo que barre la tarjeta cada pocos segundos */
+.product-card.premium::before {
+    background: linear-gradient(115deg, transparent 32%, rgba(255,232,154,0.14) 45%, rgba(255,255,255,0.26) 50%, rgba(255,232,154,0.14) 55%, transparent 68%);
+    transform: translateX(-140%);
+    transition: none;
+    animation: premiumSheen 6s ease-in-out infinite;
+}
+.product-card.premium:nth-child(2)::before { animation-delay: 0.8s; }
+.product-card.premium:nth-child(3)::before { animation-delay: 1.6s; }
+@keyframes premiumSheen {
+    0%, 55% { transform: translateX(-140%); }
+    85%, 100% { transform: translateX(140%); }
+}
+/* Aura + anillo rúnico detrás del ninja */
+.product-card.premium .card-image {
+    position: relative;
+    overflow: visible;
+    background: radial-gradient(circle at 50% 58%, rgba(240,192,64,0.42), rgba(240,192,64,0.08) 48%, transparent 66%);
+}
+.product-card.premium .card-image::before {
+    content: '';
+    position: absolute; left: 50%; top: 52%;
+    width: 108%; aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px dashed rgba(240,192,64,0.6);
+    box-shadow: 0 0 26px rgba(240,192,64,0.28), inset 0 0 26px rgba(240,192,64,0.16);
+    transform: translate(-50%, -50%);
+    animation: runeSpin 20s linear infinite;
+}
+.product-card.premium .card-image::after {
+    content: '';
+    position: absolute; left: 50%; top: 52%;
+    width: 84%; aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid rgba(255,232,154,0.35);
+    transform: translate(-50%, -50%);
+    animation: runeSpin 12s linear infinite reverse;
+}
+@keyframes runeSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.product-card.premium .card-image img {
+    position: relative; z-index: 1;
+    filter: drop-shadow(0 0 16px rgba(240,192,64,0.6)) drop-shadow(0 18px 22px rgba(0,0,0,0.44));
+}
+/* Destellos que suben */
+.sparkles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 4px rgba(240,192,64,0.9)); }
+.sparkles i {
+    position: absolute; bottom: -14px;
+    width: 10px; height: 10px;
+    background: linear-gradient(135deg, #fff8d6, #f0c040);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    opacity: 0;
+    animation: sparkleRise 5s ease-in infinite;
+}
+.sparkles i:nth-child(1) { left: 10%; animation-delay: 0s; }
+.sparkles i:nth-child(2) { left: 26%; animation-delay: 1.4s; width: 7px; height: 7px; }
+.sparkles i:nth-child(3) { left: 44%; animation-delay: 2.6s; width: 12px; height: 12px; }
+.sparkles i:nth-child(4) { left: 62%; animation-delay: 0.7s; width: 8px; height: 8px; }
+.sparkles i:nth-child(5) { left: 78%; animation-delay: 3.3s; }
+.sparkles i:nth-child(6) { left: 90%; animation-delay: 2s; width: 7px; height: 7px; }
+@keyframes sparkleRise {
+    0% { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 0; }
+    15% { opacity: 1; }
+    100% { transform: translateY(-300px) rotate(180deg) scale(1.1); opacity: 0; }
+}
+.product-card.premium > *:not(.sparkles) { position: relative; z-index: 1; }
+.product-card.premium > .premium-badge { position: absolute; }
+.premium-badge {
+    top: 12px; right: 12px;
+    background: var(--gold-grad);
+    color: var(--purple-deep);
+    padding: 4px 11px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.04em;
+    box-shadow: 0 0 16px rgba(240,192,64,0.55);
+    z-index: 2;
+}
+.product-card.premium h3 { color: var(--gold-light); text-shadow: 0 0 18px rgba(240,192,64,0.35); }
+.product-card.premium .price {
+    font-size: 1.45rem;
+    background: var(--gold-text);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    filter: drop-shadow(0 0 8px rgba(240,192,64,0.5));
+}
+.product-card.premium .add-btn {
+    background: var(--gold-grad);
+    color: var(--purple-deep);
+    box-shadow: 0 0 16px rgba(240,192,64,0.4);
+    font-weight: 800;
+}
+.product-card.premium .add-btn:hover { background: linear-gradient(135deg, #f0c040, #fff3b0); }
+@media (max-width: 640px) {
+    .product-card.premium > .premium-badge { position: relative; top: auto; right: auto; display: inline-block; margin-bottom: 8px; }
+    .premium-title { font-size: 1.35rem; }
+}
+
+/* ---- Menú: separadores y tarjetas premium ---- */
+.filter-btn.gold { border-color: rgba(240,192,64,0.5); color: var(--gold-light); }
+.filter-btn.gold.active, .filter-btn.gold:hover { background: var(--gold-grad); border-color: var(--gold); color: var(--purple-deep); }
+.menu-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 10px 2px 0;
+    font-family: 'Cinzel', serif; font-weight: 700;
+    font-size: 0.95rem; color: var(--purple-light);
+    white-space: nowrap;
+}
+.menu-divider::before, .menu-divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+.menu-divider small { font-family: 'Nunito', sans-serif; color: var(--text-muted); font-weight: 700; }
+.menu-divider.premium { color: var(--gold-light); text-shadow: 0 0 14px rgba(240,192,64,0.45); margin-top: 22px; }
+.menu-divider.premium::before, .menu-divider.premium::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.menu-divider.premium small { color: var(--gold); }
+.menu-card.premium {
+    border-color: rgba(240,192,64,0.5);
+    background:
+        radial-gradient(circle at 0% 0%, rgba(240,192,64,0.16), transparent 55%),
+        var(--surface-2);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.26), 0 0 22px rgba(240,192,64,0.16), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.menu-card.premium .menu-image {
+    position: relative;
+    background: radial-gradient(circle, rgba(240,192,64,0.34), rgba(240,192,64,0.06) 62%, transparent 72%);
+}
+.menu-card.premium .menu-image::before {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(240,192,64,0.55);
+    animation: menuRune 18s linear infinite;
+}
+@keyframes menuRune { to { transform: rotate(360deg); } }
+.menu-card.premium .menu-image img { position: relative; filter: drop-shadow(0 0 12px rgba(240,192,64,0.55)) drop-shadow(0 10px 12px rgba(0,0,0,0.45)); }
+.menu-card.premium .menu-info h3 { color: var(--gold-light); }
+.menu-card.premium .price-big {
+    font-size: 1.25rem;
+    background: var(--gold-text);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    filter: drop-shadow(0 0 8px rgba(240,192,64,0.45));
+}
+.menu-card.premium .btn-add { background: var(--gold-grad); color: var(--purple-deep); font-weight: 800; box-shadow: 0 0 14px rgba(240,192,64,0.35); }
+.menu-card.premium .btn-add:hover { background: linear-gradient(135deg, #f0c040, #fff3b0); }
+.tag-premium { background: var(--gold-grad); border-color: var(--gold); color: var(--purple-deep); }
+@media (max-width: 640px) {
+    .menu-image { grid-row: auto; align-self: start; }
+    .menu-divider { font-size: 0.85rem; }
+}
+
+/* ---- Combos: franja para sumar premium ---- */
+.combo-premium-strip {
+    position: relative; z-index: 1;
+    margin: 20px 16px 0;
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(240,192,64,0.55);
+    background:
+        radial-gradient(circle at 0% 0%, rgba(240,192,64,0.18), transparent 55%),
+        linear-gradient(135deg, rgba(74,32,128,0.85), rgba(28,10,56,0.9));
+    box-shadow: 0 0 26px rgba(240,192,64,0.18);
+    overflow: hidden;
+}
+.combo-premium-strip::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, rgba(255,232,154,0.12) 50%, transparent 65%);
+    transform: translateX(-140%);
+    animation: premiumSheen 6s ease-in-out infinite;
+}
+.cps-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; position: relative; }
+.cps-head .cps-crown { font-size: 1.9rem; filter: drop-shadow(0 0 10px rgba(240,192,64,0.7)); }
+.cps-head strong { display: block; font-family: 'Cinzel', serif; color: var(--gold-light); font-size: 1rem; }
+.cps-head small { color: var(--text-muted); font-size: 0.8rem; }
+.cps-chips { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); position: relative; }
+.cps-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px 8px 8px;
+    background: rgba(240,192,64,0.08);
+    border: 1px solid rgba(240,192,64,0.4);
+    border-radius: 50px;
+    color: var(--white);
+    font-family: inherit; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; text-align: left;
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.cps-chip:hover { transform: translateY(-2px); background: rgba(240,192,64,0.18); box-shadow: 0 0 18px rgba(240,192,64,0.35); }
+.cps-chip img { width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(240,192,64,0.55)); }
+.cps-chip span { flex: 1; }
+.cps-chip b { color: var(--gold); font-weight: 800; white-space: nowrap; }
+
+/* ---- Carrito: ítems premium ---- */
+.cart-item.premium {
+    border-color: rgba(240,192,64,0.5);
+    background: linear-gradient(90deg, rgba(240,192,64,0.12), var(--surface-2) 40%);
+    box-shadow: 0 0 18px rgba(240,192,64,0.15);
+}
+.cart-item.premium .cart-item-name { color: var(--gold-light); }
+
+/* ---- Interacciones: rebote del carrito, toast dorado y chispas al agregar ---- */
+.cart-badge.bump { animation: cartBump 0.45s ease; }
+@keyframes cartBump { 0% { transform: scale(1); } 40% { transform: scale(1.5); } 100% { transform: scale(1); } }
+.toast.toast-gold { background: var(--gold-grad); color: var(--purple-deep); box-shadow: 0 0 26px rgba(240,192,64,0.55); }
+.gold-burst {
+    position: fixed; z-index: 2000; pointer-events: none;
+    width: 12px; height: 12px;
+    background: linear-gradient(135deg, #fff8d6, #f0c040);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+@media (prefers-reduced-motion: reduce) {
+    .premium-section::after,
+    .premium-crown, .premium-title,
+    .product-card.premium::before, .product-card.premium::after,
+    .product-card.premium .card-image::before, .product-card.premium .card-image::after,
+    .menu-card.premium::after, .menu-card.premium .menu-image::before,
+    .sparkles i, .combo-premium-strip::before,
+    .hero-price-tag.premium-tag { animation: none !important; }
+    .sparkles { display: none; }
+}
+/* ---- COMBOS: íconos propios (sustituyen a los emojis) ---- */
+.combo-icon {
+    position: relative;
+    width: 84px; height: 84px;
+    margin: 6px 0 14px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 38%, rgba(240,192,64,0.24), rgba(123,63,196,0.26) 62%, rgba(26,10,46,0.45) 100%);
+    border: 1px solid rgba(240,192,64,0.4);
+    box-shadow: 0 0 22px rgba(157,93,212,0.35), inset 0 0 18px rgba(240,192,64,0.12);
+}
+.combo-icon::before {
+    content: '';
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(240,192,64,0.38);
+    animation: menuRune 18s linear infinite;
+}
+.combo-icon svg {
+    width: 56px; height: 56px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45));
+    transition: transform 0.35s ease;
+}
+.combo-card:hover .combo-icon svg { transform: scale(1.12) rotate(-4deg); }
+.combo-card.featured .combo-icon {
+    border-color: var(--gold);
+    box-shadow: 0 0 28px rgba(240,192,64,0.45), inset 0 0 20px rgba(240,192,64,0.2);
+}
+.real-ninja-card .combo-icon {
+    width: 108px; height: 108px;
+    margin: 18px auto 16px;
+    border-color: var(--gold);
+    box-shadow: 0 0 34px rgba(240,192,64,0.5), inset 0 0 24px rgba(240,192,64,0.2);
+}
+.real-ninja-card .combo-icon svg { width: 76px; height: 76px; }
+@media (prefers-reduced-motion: reduce) { .combo-icon::before { animation: none; } }
     </style>
 </head>
 <body>
@@ -1138,7 +1890,7 @@ body {
         </div>
         <ul class="nav-list">
             <li><a onclick="showPage('inicio')" class="nav-link active"><span>🏠</span> Inicio</a></li>
-            <li><a onclick="showPage('menu')" class="nav-link"><span></span> Menú</a></li>
+            <li><a onclick="showPage('menu')" class="nav-link"><span>📋</span> Menú</a></li>
             <li><a onclick="showPage('combos')" class="nav-link"><span>🔥</span> Combos & Paquetes</a></li>
             <li><a onclick="showPage('carrito')" class="nav-link"><span>🛒</span> Mi Carrito</a></li>
             <li><a onclick="showPage('pedido')" class="nav-link"><span>📦</span> Rastrear Pedido</a></li>
@@ -1147,7 +1899,9 @@ body {
         </ul>
         <div class="sidebar-footer">
             <p>📞 +51 996 989 580</p>
-            <p> 9 AM – 5 PM</p>
+            <p>📞 +51 984 757 668</p>
+            <p>📞 +51 961 711 421</p>
+            <p>🕘 9 AM – 5 PM</p>
         </div>
     </nav>
     <div id="overlay" class="overlay hidden" onclick="toggleSidebar()"></div>
@@ -1183,7 +1937,7 @@ body {
                 <div class="hero-content">
                     <div class="hero-text">
                         <div class="hero-badge">
-                            <span></span> AUTÉNTICO SABOR NINJA
+                            <span>⚔️</span> AUTÉNTICO SABOR NINJA
                         </div>
                         
                         <h1 class="hero-title">
@@ -1205,8 +1959,13 @@ body {
                             </button>
                         </div>
                         
-                        <div class="hero-price-tag">
-                            ¡Desde S/. 3.00 por empanada!
+                        <div class="hero-price-row">
+                            <div class="hero-price-tag">
+                                ¡Desde S/. 3.00 por empanada!
+                            </div>
+                            <div class="hero-price-tag premium-tag" onclick="document.getElementById('premium-section').scrollIntoView({behavior:'smooth'})">
+                                👑 Premium S/. 5.00
+                            </div>
                         </div>
                     </div>
                     
@@ -1219,8 +1978,8 @@ body {
             <!-- STATS BAR -->
             <div class="stats-bar">
                 <div class="stat">
-                    <span class="stat-num">S/. 3</span>
-                    <span class="stat-label">Precio único</span>
+                    <span class="stat-num">S/. 3 · 5</span>
+                    <span class="stat-label">Clásica y Premium</span>
                 </div>
                 <div class="stat">
                     <span class="stat-num">3</span>
@@ -1239,6 +1998,7 @@ body {
             <!-- SABORES DESTACADOS -->
             <section class="section-block">
                 <h2 class="section-title">Nuestros Sabores</h2>
+                <div class="line-pill">🥟 Línea Clásica · S/. 3.00</div>
                 <div class="cards-grid">
                     <div class="product-card popular" onclick="addToCart('Carne', 3)">
                         <div class="popular-badge">⭐ Más pedida</div>
@@ -1271,6 +2031,50 @@ body {
                 </div>
             </section>
 
+            <!-- SABORES PREMIUM · S/. 5.00 -->
+            <section class="section-block premium-section" id="premium-section">
+                <div class="premium-header">
+                    <div class="premium-crown-row"><span class="gold-line"></span><span class="premium-crown">👑</span><span class="gold-line"></span></div>
+                    <h2 class="premium-title">Sabores Premium</h2>
+                    <div class="line-pill gold">✦ Edición Dorada · S/. 5.00 ✦</div>
+                </div>
+                <div class="cards-grid premium-grid">
+                    <div class="product-card premium" onclick="addToCart('Carne Premium', 5, true)">
+                        <div class="premium-badge">👑 Premium</div>
+                        <div class="sparkles"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="card-image"><img src="assets/ninja-carne.png" alt="Ninja carne premium"></div>
+                        <h3>Carne</h3>
+                        <p>Una deliciosa combinación de carne molida sazonada con cebolla, ajo, comino y pimienta cubierta por la masa crujiente y dorada. Acompañamiento ideal: un toque de salsa picante o limón al gusto.</p>
+                        <div class="card-footer">
+                            <span class="price">S/. 5.00</span>
+                            <button class="add-btn">+ Agregar</button>
+                        </div>
+                    </div>
+                    <div class="product-card premium" onclick="addToCart('Pollo Premium', 5, true)">
+                        <div class="premium-badge">👑 Premium</div>
+                        <div class="sparkles"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="card-image"><img src="assets/ninja-pollo.png" alt="Ninja pollo premium"></div>
+                        <h3>Pollo</h3>
+                        <p>Rellena de pollo sazonado y semi jugoso, es un bocado tradicional y reconfortante, la masa crujiente envuelve el relleno con amor y sabor, perfecta para cualquier ocasión.</p>
+                        <div class="card-footer">
+                            <span class="price">S/. 5.00</span>
+                            <button class="add-btn">+ Agregar</button>
+                        </div>
+                    </div>
+                    <div class="product-card premium" onclick="addToCart('Mixta Premium', 5, true)">
+                        <div class="premium-badge">👑 Premium</div>
+                        <div class="sparkles"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="card-image"><img src="assets/ninja-mixto.png" alt="Ninja mixto premium"></div>
+                        <h3>Mixta</h3>
+                        <p>Una deliciosa combinación de salchicha, queso, y un toque de orégano, la masa crujiente envuelve este trío de sabores, creando una empanada que te hará sonreír con cada bocado.</p>
+                        <div class="card-footer">
+                            <span class="price">S/. 5.00</span>
+                            <button class="add-btn">+ Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- INFO STRIP -->
             <div class="info-strip">
                 <div class="info-item">
@@ -1286,7 +2090,7 @@ body {
                 <div class="info-item">
                     <span>📞</span>
                     <strong>Pedidos</strong>
-                    <div>+51 996 989 580</div>
+                    <div>+51 996 989 580<br>+51 984 757 668<br>+51 961 711 421</div>
                 </div>
             </div>
         </div>
@@ -1295,19 +2099,23 @@ body {
         <div id="page-menu" class="page">
             <div class="page-header">
                 <h2>📋 Nuestro Menú</h2>
-                <p>Todas las empanadas artesanales a S/. 3.00</p>
+                <p>Empanadas artesanales · Clásicas S/. 3.00 · 👑 Premium S/. 5.00</p>
             </div>
 
             <div class="filter-tabs">
                 <button class="filter-btn active" onclick="filterMenu('todos', this)">Todos</button>
                 <button class="filter-btn" onclick="filterMenu('carne', this)">🥩 Carne</button>
                 <button class="filter-btn" onclick="filterMenu('pollo', this)">🍗 Pollo</button>
-                <button class="filter-btn" onclick="filterMenu('mixto', this)"> Mixto</button>
+                <button class="filter-btn" onclick="filterMenu('mixto', this)">🥟 Mixto</button>
+                <button class="filter-btn" onclick="filterMenu('clasica', this)">S/. 3.00</button>
+                <button class="filter-btn gold" onclick="filterMenu('premium', this)">👑 S/. 5.00 Premium</button>
             </div>
 
             <div class="menu-grid" id="menu-grid">
-                <div class="menu-card" data-cat="carne">
-                    <div class="menu-emoji">🥩</div>
+                <div class="menu-divider" data-line="clasica">🥟 Línea Clásica <small>S/. 3.00</small></div>
+
+                <div class="menu-card" data-cat="carne" data-line="clasica">
+                    <div class="menu-image"><img src="assets/ninja-carne.png" alt="Empanada de Carne"></div>
                     <div class="menu-info">
                         <h3>Empanada de Carne</h3>
                         <p>Una deliciosa combinación de carne molida sazonada con cebolla, ajo, comino y pimienta cubierta por la masa crujiente y dorada. Acompañamiento ideal: un toque de salsa picante o limón al gusto.</p>
@@ -1318,12 +2126,12 @@ body {
                     </div>
                     <div class="menu-action">
                         <span class="price-big">S/. 3.00</span>
-                        <button class="btn-add" onclick="addToCart('Empanada de Carne', 3)">Agregar </button>
+                        <button class="btn-add" onclick="addToCart('Empanada de Carne', 3)">Agregar 🛒</button>
                     </div>
                 </div>
 
-                <div class="menu-card" data-cat="pollo">
-                    <div class="menu-emoji">🍗</div>
+                <div class="menu-card" data-cat="pollo" data-line="clasica">
+                    <div class="menu-image"><img src="assets/ninja-pollo.png" alt="Empanada de Pollo"></div>
                     <div class="menu-info">
                         <h3>Empanada de Pollo</h3>
                         <p>Rellena de pollo sazonado y semi jugoso, es un bocado tradicional y reconfortante, la masa crujiente envuelve el relleno con amor y sabor, perfecta para cualquier ocasión.</p>
@@ -1338,8 +2146,8 @@ body {
                     </div>
                 </div>
 
-                <div class="menu-card" data-cat="mixto">
-                    <div class="menu-emoji">🥟</div>
+                <div class="menu-card" data-cat="mixto" data-line="clasica">
+                    <div class="menu-image"><img src="assets/ninja-mixto.png" alt="Empanada Mixta"></div>
                     <div class="menu-info">
                         <h3>Empanada Mixta</h3>
                         <p>Una deliciosa combinación de salchicha, queso, y un toque de orégano, la masa crujiente envuelve este trío de sabores, creando una empanada que te hará sonreír con cada bocado.</p>
@@ -1353,6 +2161,56 @@ body {
                         <button class="btn-add" onclick="addToCart('Empanada Mixta', 3)">Agregar 🛒</button>
                     </div>
                 </div>
+
+                <div class="menu-divider premium" data-line="premium">👑 Línea Premium <small>S/. 5.00</small></div>
+
+                <div class="menu-card premium" data-cat="carne" data-line="premium">
+                    <div class="menu-image"><img src="assets/ninja-carne.png" alt="Empanada de Carne Premium"></div>
+                    <div class="menu-info">
+                        <h3>Empanada de Carne Premium</h3>
+                        <p>Una deliciosa combinación de carne molida sazonada con cebolla, ajo, comino y pimienta cubierta por la masa crujiente y dorada. Acompañamiento ideal: un toque de salsa picante o limón al gusto.</p>
+                        <div class="menu-tags">
+                            <span class="tag tag-premium">👑 Premium</span>
+                            <span class="tag tag-gold">Edición Dorada</span>
+                        </div>
+                    </div>
+                    <div class="menu-action">
+                        <span class="price-big">S/. 5.00</span>
+                        <button class="btn-add" onclick="addToCart('Empanada de Carne Premium', 5, true)">Agregar 🛒</button>
+                    </div>
+                </div>
+
+                <div class="menu-card premium" data-cat="pollo" data-line="premium">
+                    <div class="menu-image"><img src="assets/ninja-pollo.png" alt="Empanada de Pollo Premium"></div>
+                    <div class="menu-info">
+                        <h3>Empanada de Pollo Premium</h3>
+                        <p>Rellena de pollo sazonado y semi jugoso, es un bocado tradicional y reconfortante, la masa crujiente envuelve el relleno con amor y sabor, perfecta para cualquier ocasión.</p>
+                        <div class="menu-tags">
+                            <span class="tag tag-premium">👑 Premium</span>
+                            <span class="tag tag-gold">Edición Dorada</span>
+                        </div>
+                    </div>
+                    <div class="menu-action">
+                        <span class="price-big">S/. 5.00</span>
+                        <button class="btn-add" onclick="addToCart('Empanada de Pollo Premium', 5, true)">Agregar 🛒</button>
+                    </div>
+                </div>
+
+                <div class="menu-card premium" data-cat="mixto" data-line="premium">
+                    <div class="menu-image"><img src="assets/ninja-mixto.png" alt="Empanada Mixta Premium"></div>
+                    <div class="menu-info">
+                        <h3>Empanada Mixta Premium</h3>
+                        <p>Una deliciosa combinación de salchicha, queso, y un toque de orégano, la masa crujiente envuelve este trío de sabores, creando una empanada que te hará sonreír con cada bocado.</p>
+                        <div class="menu-tags">
+                            <span class="tag tag-premium">👑 Premium</span>
+                            <span class="tag tag-gold">Edición Dorada</span>
+                        </div>
+                    </div>
+                    <div class="menu-action">
+                        <span class="price-big">S/. 5.00</span>
+                        <button class="btn-add" onclick="addToCart('Empanada Mixta Premium', 5, true)">Agregar 🛒</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1364,14 +2222,39 @@ body {
                 <p>¡Más empanadas, más ahorro!</p>
             </div>
 
+            <div class="combo-premium-strip">
+                <div class="cps-head">
+                    <span class="cps-crown">👑</span>
+                    <div>
+                        <strong>Suma Empanadas Premium</strong>
+                        <small>Edición Dorada · S/. 5.00 c/u — agrégalas directo a tu pedido</small>
+                    </div>
+                </div>
+                <div class="cps-chips">
+                    <button class="cps-chip" onclick="addToCart('Carne Premium', 5, true)"><img src="assets/ninja-carne.png" alt=""><span>Carne</span><b>S/. 5.00</b></button>
+                    <button class="cps-chip" onclick="addToCart('Pollo Premium', 5, true)"><img src="assets/ninja-pollo.png" alt=""><span>Pollo</span><b>S/. 5.00</b></button>
+                    <button class="cps-chip" onclick="addToCart('Mixta Premium', 5, true)"><img src="assets/ninja-mixto.png" alt=""><span>Mixta</span><b>S/. 5.00</b></button>
+                </div>
+            </div>
+
             <div class="combos-grid">
                 <div class="combo-card">
-                    <div class="combo-emoji">🥷</div>
+                    <div class="combo-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+<defs><linearGradient id="c1g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe89a"/><stop offset="1" stop-color="#c9950f"/></linearGradient><linearGradient id="c1p" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a2aa0"/><stop offset="1" stop-color="#241046"/></linearGradient></defs>
+<circle cx="32" cy="34" r="21" fill="url(#c1p)" stroke="#c39de8" stroke-width="1.5"/>
+<rect x="15" y="29" width="34" height="12" rx="6" fill="#f6d6b0"/>
+<ellipse cx="25" cy="35" rx="3" ry="3.4" fill="#1a0a2e"/><ellipse cx="39" cy="35" rx="3" ry="3.4" fill="#1a0a2e"/>
+<circle cx="26" cy="33.8" r="1" fill="#fff"/><circle cx="40" cy="33.8" r="1" fill="#fff"/>
+<path d="M11.5 26 Q32 19 52.5 26 V31 Q32 24 11.5 31 Z" fill="url(#c1g)"/>
+<rect x="26" y="22.4" width="12" height="7.2" rx="1.6" fill="url(#c1g)" stroke="#8a640a" stroke-width=".8"/>
+<path d="M32 24.6 l1.4 2.4 -1.4 2.4 -1.4 -2.4z" fill="#8a640a"/>
+<path d="M52 26 L61 21 L59 29 Z M52 28.5 L61 34 L55 35 Z" fill="url(#c1g)"/>
+</svg></div>
                     <h3>Combo Ninja Básico</h3>
                     <p class="combo-desc">Para el ninja solitario</p>
                     <ul class="combo-list">
                         <li>✅ 2 Empanadas (a elegir)</li>
-                        <li>✅ 1 Bebida gaseosa</li>
+                        <li>☕ 1 Cafesito caliente</li>
                     </ul>
                     <div class="combo-prices">
                         <span class="original">Precio normal: S/. 9.00</span>
@@ -1381,12 +2264,25 @@ body {
                 </div>
 
                 <div class="combo-card featured">
-                    <div class="combo-emoji">⚔️</div>
+                    <div class="combo-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+<defs><linearGradient id="c2b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#a99ac9"/></linearGradient><linearGradient id="c2g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe89a"/><stop offset="1" stop-color="#c9950f"/></linearGradient>
+<g id="combo-katana">
+<path d="M32 3 L35 9 V42 H29 V9 Z" fill="url(#c2b)"/>
+<path d="M32 4 V42" stroke="#7d6ca3" stroke-width=".8" opacity=".7"/>
+<rect x="25" y="42" width="14" height="3.8" rx="1.9" fill="url(#c2g)"/>
+<rect x="29" y="45.8" width="6" height="13" rx="2" fill="#4a2080"/>
+<path d="M29 49.5 h6 M29 53 h6 M29 56.5 h6" stroke="#c39de8" stroke-width="1"/>
+</g></defs>
+<use href="#combo-katana" transform="rotate(42 32 32)"/>
+<use href="#combo-katana" transform="rotate(-42 32 32)"/>
+<path d="M32 19 L35.5 28.5 L45 32 L35.5 35.5 L32 45 L28.5 35.5 L19 32 L28.5 28.5 Z" fill="url(#c2g)" stroke="#8a640a" stroke-width=".9"/>
+<circle cx="32" cy="32" r="3" fill="#2d1557"/>
+</svg></div>
                     <h3>Combo Ninja Supremo</h3>
                     <p class="combo-desc">Para dos ninjas hambrientos</p>
                     <ul class="combo-list">
                         <li>✅ 6 Empanadas variadas</li>
-                        <li>✅ 2 Bebidas gaseosas</li>
+                        <li>☕ 2 Cafesitos calientes</li>
                     </ul>
                     <div class="combo-prices">
                         <span class="original">Precio normal: S/. 26.00</span>
@@ -1396,12 +2292,26 @@ body {
                 </div>
 
                 <div class="combo-card">
-                    <div class="combo-emoji">👨‍👩‍‍👦</div>
+                    <div class="combo-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+<defs><linearGradient id="c3g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe89a"/><stop offset="1" stop-color="#c9950f"/></linearGradient><linearGradient id="c3p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b06ae4"/><stop offset="1" stop-color="#5a2aa0"/></linearGradient><linearGradient id="c3d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c040"/><stop offset="1" stop-color="#9c6f0a"/></linearGradient></defs>
+<path d="M4 55 C4 41 10 35 18.5 35 C27 35 33 41 33 55 Z" fill="url(#c3p)"/>
+<circle cx="18.5" cy="22" r="8" fill="#f6d6b0"/>
+<rect x="10.2" y="18" width="16.6" height="3.6" rx="1" fill="url(#c3g)"/>
+<circle cx="15.8" cy="25.2" r=".9" fill="#1a0a2e"/><circle cx="21.2" cy="25.2" r=".9" fill="#1a0a2e"/>
+<path d="M31 55 C31 41 37 35 45.5 35 C54 35 60 41 60 55 Z" fill="url(#c3d)"/>
+<circle cx="45.5" cy="22" r="8" fill="#f6d6b0"/>
+<rect x="37.2" y="18" width="16.6" height="3.6" rx="1" fill="#7b3fc4"/>
+<circle cx="42.8" cy="25.2" r=".9" fill="#1a0a2e"/><circle cx="48.2" cy="25.2" r=".9" fill="#1a0a2e"/>
+<path d="M22 60 C22 49 26.5 44 32 44 C37.5 44 42 49 42 60 Z" fill="#f5f0ff" stroke="#c39de8" stroke-width="1"/>
+<circle cx="32" cy="37" r="6.2" fill="#f6d6b0" stroke="#e6b98c" stroke-width=".6"/>
+<rect x="25.9" y="33.8" width="12.2" height="3" rx="1" fill="url(#c3g)"/>
+<circle cx="29.8" cy="39.6" r=".8" fill="#1a0a2e"/><circle cx="34.2" cy="39.6" r=".8" fill="#1a0a2e"/>
+</svg></div>
                     <h3>Paquete Familiar</h3>
                     <p class="combo-desc">Para toda la familia ninja</p>
                     <ul class="combo-list">
                         <li>✅ 12 Empanadas mixtas</li>
-                        <li>✅ 4 Bebidas gaseosas</li>
+                        <li>☕ 4 Cafesitos calientes</li>
                     </ul>
                     <div class="combo-prices">
                         <span class="original">Precio normal: S/. 52.00</span>
@@ -1411,7 +2321,16 @@ body {
                 </div>
 
                 <div class="combo-card">
-                    <div class="combo-emoji"></div>
+                    <div class="combo-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+<defs><linearGradient id="c4g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe89a"/><stop offset="1" stop-color="#c9950f"/></linearGradient><linearGradient id="c4p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7b3fc4"/><stop offset="1" stop-color="#2d1557"/></linearGradient></defs>
+<rect x="14" y="7" width="30" height="50" rx="3" fill="url(#c4p)" stroke="#c39de8" stroke-width="1.4"/>
+<rect x="44" y="26" width="11" height="31" rx="2" fill="#3a1a6e" stroke="#c39de8" stroke-width="1.2"/>
+<rect x="19" y="14" width="7" height="6" rx="1" fill="url(#c4g)"/><rect x="30" y="14" width="7" height="6" rx="1" fill="url(#c4g)"/><rect x="19" y="23" width="7" height="6" rx="1" fill="#3a1a6e"/><rect x="30" y="23" width="7" height="6" rx="1" fill="url(#c4g)"/><rect x="19" y="32" width="7" height="6" rx="1" fill="url(#c4g)"/><rect x="30" y="32" width="7" height="6" rx="1" fill="url(#c4g)"/><rect x="19" y="41" width="7" height="6" rx="1" fill="url(#c4g)"/><rect x="30" y="41" width="7" height="6" rx="1" fill="#3a1a6e"/>
+<rect x="46.5" y="31" width="6" height="5" rx="1" fill="url(#c4g)"/><rect x="46.5" y="40" width="6" height="5" rx="1" fill="#5a2aa0"/>
+<rect x="25" y="48" width="9" height="9" rx="1.5" fill="url(#c4g)"/>
+<path d="M29 2 V7" stroke="#c39de8" stroke-width="1.5" stroke-linecap="round"/><circle cx="29" cy="2.4" r="1.5" fill="#f0c040"/>
+<path d="M6 57.5 H60" stroke="#f0c040" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+</svg></div>
                     <h3>Paquete Oficina</h3>
                     <p class="combo-desc">Para reuniones y equipos</p>
                     <ul class="combo-list">
@@ -1425,7 +2344,20 @@ body {
                 </div>
 
                 <div class="combo-card">
-                    <div class="combo-emoji">🎉</div>
+                    <div class="combo-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+<defs><linearGradient id="c5g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe89a"/><stop offset="1" stop-color="#c9950f"/></linearGradient><linearGradient id="c5r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7a7a"/><stop offset="1" stop-color="#b3122f"/></linearGradient></defs>
+<path d="M32 1 V8" stroke="#f0c040" stroke-width="1.6" stroke-linecap="round"/>
+<rect x="23" y="8" width="18" height="5" rx="2" fill="url(#c5g)"/>
+<ellipse cx="32" cy="31" rx="19" ry="18" fill="url(#c5r)"/>
+<ellipse cx="32" cy="31" rx="9.5" ry="18" fill="none" stroke="#7a0b20" stroke-opacity=".5" stroke-width="1.3"/>
+<path d="M13 31 H51 M15.6 21 Q32 25 48.4 21 M15.6 41 Q32 37 48.4 41" stroke="#7a0b20" stroke-opacity=".5" stroke-width="1.3" fill="none"/>
+<path d="M32 22.5 L34.4 28.6 L40.5 31 L34.4 33.4 L32 39.5 L29.6 33.4 L23.5 31 L29.6 28.6 Z" fill="#ffe89a" opacity=".95"/>
+<rect x="23" y="49" width="18" height="5" rx="2" fill="url(#c5g)"/>
+<path d="M28 54 V61 M32 54 V62 M36 54 V61" stroke="#f0c040" stroke-width="1.7" stroke-linecap="round"/>
+<circle cx="7" cy="14" r="2" fill="#c39de8"/><circle cx="57" cy="11" r="2" fill="#f0c040"/>
+<circle cx="8" cy="46" r="1.8" fill="#ff8fb1"/><rect x="53" y="42" width="4" height="4" rx=".8" fill="#c39de8" transform="rotate(30 55 44)"/>
+<path d="M54 24 l1.4 2.8 2.8 1.4 -2.8 1.4 -1.4 2.8 -1.4 -2.8 -2.8 -1.4 2.8 -1.4z" fill="#ffe89a"/>
+</svg></div>
                     <h3>Paquete Evento</h3>
                     <p class="combo-desc">Fiestas y celebraciones</p>
                     <ul class="combo-list">
@@ -1435,11 +2367,19 @@ body {
                     <div class="combo-prices">
                         <span class="combo-price">S/. 150.00</span>
                     </div>
-                    <button class="btn-combo" onclick="addToCart('Paquete Evento', 150)"> Agregar Combo</button>
+                    <button class="btn-combo" onclick="addToCart('Paquete Evento', 150)">🛒 Agregar Combo</button>
                 </div>
 
                 <div class="combo-card real-ninja-card">
-                    <div class="combo-emoji">🌅</div>
+                    <div class="combo-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+<defs><linearGradient id="c6g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset="1" stop-color="#e0a51c"/></linearGradient><linearGradient id="c6r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a4d"/><stop offset="1" stop-color="#b3202a"/></linearGradient></defs>
+<circle cx="32" cy="27" r="20.5" fill="none" stroke="#ffe89a" stroke-opacity=".45" stroke-width="1.2" stroke-dasharray="2 4"/>
+<circle cx="32" cy="27" r="16" fill="url(#c6g)"/>
+<rect x="16" y="24" width="5.2" height="34" fill="url(#c6r)"/><rect x="42.8" y="24" width="5.2" height="34" fill="url(#c6r)"/>
+<rect x="11" y="32" width="42" height="4.2" rx="1" fill="url(#c6r)"/>
+<path d="M2.5 16.5 Q32 27 61.5 16.5 L59.5 24.5 Q32 18.5 4.5 24.5 Z" fill="url(#c6r)"/>
+<path d="M4 58.5 H60" stroke="#f0c040" stroke-width="1.8" stroke-linecap="round" opacity=".85"/>
+</svg></div>
                     <h3>Combo Real Ninja</h3>
                     <div class="real-ninja-highlight">Reserva especial</div>
                     <p class="combo-desc">Se reserva con 3 a 4 días de anticipación</p>
@@ -1459,6 +2399,7 @@ body {
         <div id="page-carrito" class="page">
             <div class="page-header">
                 <h2>🛒 Mi Carrito</h2>
+                <p class="page-header-sub" id="cart-count-label">Revisa tu pedido ninja 🥷</p>
             </div>
 
             <div id="cart-empty" class="cart-empty">
@@ -1472,19 +2413,26 @@ body {
                 <div class="cart-items" id="cart-items"></div>
 
                 <div class="cart-summary" id="cart-summary">
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="subtotal">S/. 0.00</span>
+                    <div class="summary-title">🧾 Resumen del Pedido</div>
+                    <div class="summary-rows">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">S/. 0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Delivery</span>
+                            <span class="free-delivery"><span class="delivery-badge">🚚 GRATIS</span></span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>TOTAL</span>
+                            <span id="total-price">S/. 0.00</span>
+                        </div>
                     </div>
-                    <div class="summary-row">
-                        <span>Delivery</span>
-                        <span class="free-delivery">GRATIS </span>
+                    <button class="btn-checkout" onclick="showCheckout()">💬 Realizar Pedido por WhatsApp</button>
+                    <div id="checkout-contacts" class="checkout-contacts hidden">
+                        <p class="checkout-pick">👆 Elige el número para enviar tu pedido:</p>
+                        <div id="checkout-list" class="checkout-list"></div>
                     </div>
-                    <div class="summary-row total">
-                        <span>TOTAL</span>
-                        <span id="total-price">S/. 0.00</span>
-                    </div>
-                    <button class="btn-checkout" onclick="showCheckout()">📦 Realizar Pedido por WhatsApp</button>
                     <button class="btn-clear" onclick="clearCart()">🗑️ Vaciar Carrito</button>
                 </div>
             </div>
@@ -1493,13 +2441,17 @@ body {
         <!-- PEDIDO PAGE -->
         <div id="page-pedido" class="page">
             <div class="page-header">
-                <h2> Estado de Pedido</h2>
+                <h2>📦 Estado de Pedido</h2>
             </div>
 
             <div class="tracking-card">
                 <div class="tracking-info">
                     <p>Para rastrear tu pedido, contáctanos directamente:</p>
-                    <a href="https://wa.me/51996989580" class="btn-wa">📲 WhatsApp: +51 996 989 580</a>
+                    <div class="tracking-wa">
+                        <a href="https://wa.me/51996989580" class="btn-wa">📲 +51 996 989 580</a>
+                        <a href="https://wa.me/51984757668" class="btn-wa">📲 +51 984 757 668</a>
+                        <a href="https://wa.me/51961711421" class="btn-wa">📲 +51 961 711 421</a>
+                    </div>
                 </div>
 
                 <div class="tracking-steps">
@@ -1537,26 +2489,45 @@ body {
 
         <!-- CONTACTO PAGE -->
         <div id="page-contacto" class="page">
+            <div class="shuriken-fx" aria-hidden="true">
+                <div class="shuriken gold s1"></div>
+                <div class="shuriken violet s2"></div>
+                <div class="shuriken gold s3"></div>
+                <div class="shuriken violet s4"></div>
+                <div class="shuriken gold s5"></div>
+                <div class="shuriken violet s6"></div>
+                <div class="contact-slash csl1"></div>
+                <div class="contact-slash csl2"></div>
+            </div>
+
             <div class="page-header">
+                <div class="shuriken gold hdr-s"></div>
                 <h2>📍 Contacto & Ubicación</h2>
+                <p class="page-header-sub">Encuéntranos en Cusco · Pide por WhatsApp 🥷</p>
             </div>
 
             <div class="contact-grid">
                 <div class="contact-card">
-                    <div class="contact-icon">📞</div>
+                    <span class="card-corner c-tl"></span>
+                    <span class="card-corner c-br"></span>
+                    <div class="contact-icon-chip"><span class="contact-icon">📞</span></div>
                     <h3>Teléfono / WhatsApp</h3>
                     <div class="contact-val contact-numbers">
+                        <a href="tel:+51996989580">+51 996 989 580</a>
                         <a href="tel:+51984757668">+51 984 757 668</a>
                         <a href="tel:+51961711421">+51 961 711 421</a>
                     </div>
                     <div class="contact-actions">
-                        <a href="https://wa.me/51984757668?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp 1</a>
-                        <a href="https://wa.me/51961711421?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp 2</a>
+                        <a href="https://wa.me/51996989580?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp Principal</a>
+                        <a href="https://wa.me/51984757668?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp 2</a>
+                        <a href="https://wa.me/51961711421?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp 3</a>
                     </div>
                 </div>
 
                 <div class="contact-card">
-                    <div class="contact-icon">📍</div>
+                    <span class="card-corner c-tl"></span>
+                    <span class="card-corner c-br"></span>
+                    <div class="contact-icon-chip"><span class="contact-icon">📍</span></div>
                     <h3>Dirección</h3>
                     <div class="contact-val">
                         Urb. Los Licenciados<br>
@@ -1566,7 +2537,9 @@ body {
                 </div>
 
                 <div class="contact-card">
-                    <div class="contact-icon">🕘</div>
+                    <span class="card-corner c-tl"></span>
+                    <span class="card-corner c-br"></span>
+                    <div class="contact-icon-chip"><span class="contact-icon">🕘</span></div>
                     <h3>Horario de Atención</h3>
                     <div class="contact-val">Todos los sábados &amp; pedidos con anticipación de 3 a 4 días</div>
                     <div class="contact-time">9:00 AM — 5:00 PM</div>
@@ -1575,8 +2548,10 @@ body {
             </div>
 
             <div class="map-placeholder">
+                <div class="map-slash sl-t"></div>
+                <div class="map-slash sl-b"></div>
                 <div class="map-inner">
-                    <span class="map-pin">📍</span>
+                    <div class="map-pin-wrap"><span class="map-pin">📍</span></div>
                     <h3>Urb. Los Licenciados, Psj. Loa H-7</h3>
                     <p>Cusco, Perú</p>
                     <a href="https://maps.app.goo.gl/tFbMVevL72wKv6QF9" class="btn-wa map-link" target="_blank" rel="noopener">📍 Abrir ubicación real en Google Maps</a>
@@ -1613,9 +2588,14 @@ body {
                     <p>Cada empanada lleva el corazón y la pasión de nuestra familia.</p>
                 </div>
                 <div class="value-card">
-                    <span></span>
+                    <span>⚡</span>
                     <h4>Rápido y Puntual</h4>
                     <p>Pedidos entregados a tiempo, porque valoramos tu tiempo.</p>
+                </div>
+                <div class="value-card">
+                    <span>👑</span>
+                    <h4>Línea Premium Dorada</h4>
+                    <p>Nuestra edición dorada a S/. 5.00, junto a la clásica de S/. 3.00. Tú eliges.</p>
                 </div>
             </div>
 
@@ -1675,6 +2655,13 @@ PLAN NINJA EMPANADA - APP JS
 let cart = [];
 let sidebarOpen = false;
 
+// ---- CONTACTOS (3 líneas para pedidos) ----
+const CONTACTOS = [
+    { label: 'Principal', tel: '51996989580', display: '+51 996 989 580' },
+    { label: 'Línea 2', tel: '51984757668', display: '+51 984 757 668' },
+    { label: 'Línea 3', tel: '51961711421', display: '+51 961 711 421' }
+];
+
 // ---- SPLASH ----
 window.addEventListener('load', () => {
     setTimeout(() => {
@@ -1713,21 +2700,59 @@ function toggleSidebar() {
 }
 
 // ---- CART ----
-function addToCart(name, price) {
+// Última posición del dedo/mouse: de ahí salen las chispas doradas
+let lastPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+document.addEventListener('pointerdown', e => { lastPointer = { x: e.clientX, y: e.clientY }; }, true);
+
+function addToCart(name, price, premium = false) {
     const existing = cart.find(item => item.name === name);
     if (existing) {
         existing.qty += 1;
     } else {
-        cart.push({ name, price, qty: 1 });
+        cart.push({ name, price, qty: 1, premium });
     }
     updateCartUI();
-    showToast('✅ ' + name + ' agregado al carrito!');
+    bumpCart();
+    if (premium) {
+        goldBurst();
+        showToast('👑 ' + name + ' agregado al carrito!', true);
+    } else {
+        showToast('✅ ' + name + ' agregado al carrito!');
+    }
+}
+
+function bumpCart() {
+    const badge = document.getElementById('cart-count');
+    badge.classList.remove('bump');
+    void badge.offsetWidth;
+    badge.classList.add('bump');
+}
+
+function goldBurst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const { x, y } = lastPointer;
+    const n = 14;
+    for (let i = 0; i < n; i++) {
+        const s = document.createElement('span');
+        s.className = 'gold-burst';
+        s.style.left = x + 'px';
+        s.style.top = y + 'px';
+        document.body.appendChild(s);
+        const ang = (Math.PI * 2 * i) / n + Math.random() * 0.4;
+        const dist = 50 + Math.random() * 60;
+        const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist;
+        const anim = s.animate([
+            { transform: 'translate(-50%, -50%) translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+            { transform: `translate(-50%, -50%) translate(${dx}px, ${dy}px) scale(0.2) rotate(180deg)`, opacity: 0 }
+        ], { duration: 650 + Math.random() * 250, easing: 'cubic-bezier(.2,.8,.3,1)' });
+        anim.onfinish = () => s.remove();
+    }
 }
 
 function removeFromCart(index) {
     cart.splice(index, 1);
     updateCartUI();
-    renderCartPage();
+    renderCartPage(false);
 }
 
 function changeQty(index, delta) {
@@ -1736,7 +2761,7 @@ function changeQty(index, delta) {
         cart.splice(index, 1);
     }
     updateCartUI();
-    renderCartPage();
+    renderCartPage(false);
 }
 
 function clearCart() {
@@ -1752,10 +2777,15 @@ function updateCartUI() {
     document.getElementById('cart-count').textContent = total;
 }
 
-function renderCartPage() {
+function renderCartPage(animate = true) {
     const emptyEl = document.getElementById('cart-empty');
     const contentEl = document.getElementById('cart-content');
     const itemsEl = document.getElementById('cart-items');
+    const countLabel = document.getElementById('cart-count-label');
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    if (countLabel) {
+        countLabel.textContent = totalQty === 1 ? '1 artículo en tu pedido 🥷' : totalQty + ' artículos en tu pedido 🥷';
+    }
     if (cart.length === 0) {
         emptyEl.classList.remove('hidden');
         contentEl.classList.add('hidden');
@@ -1763,22 +2793,31 @@ function renderCartPage() {
     }
     emptyEl.classList.add('hidden');
     contentEl.classList.remove('hidden');
+    document.getElementById('checkout-contacts').classList.add('hidden');
     itemsEl.innerHTML = '';
     let subtotal = 0;
     cart.forEach((item, i) => {
         const itemTotal = item.price * item.qty;
         subtotal += itemTotal;
         const div = document.createElement('div');
-        div.className = 'cart-item';
+        div.className = 'cart-item' + (item.premium ? ' premium' : '');
+        if (animate) div.style.animationDelay = (i * 0.07) + 's';
         div.innerHTML = `
-            <div class="cart-item-name">🥟 ${item.name}</div>
-            <div class="cart-item-qty">
-                <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
-                <span class="qty-val">${item.qty}</span>
-                <button class="qty-btn" onclick="changeQty(${i}, +1)">+</button>
+            <div class="cart-item-icon">${item.premium ? '👑' : '🥟'}</div>
+            <div class="cart-item-body">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-sub">${item.premium ? 'Línea Premium · Edición Dorada' : 'Línea Clásica · Artesanal'}</div>
             </div>
-            <div class="cart-item-price">S/. ${itemTotal.toFixed(2)}</div>
-            <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+            <div class="cart-item-right">
+                <div class="cart-item-price">S/. ${itemTotal.toFixed(2)}</div>
+                <div class="qty-row">
+                    <button class="qty-btn minus" onclick="changeQty(${i}, -1)">−</button>
+                    <span class="qty-val">${item.qty}</span>
+                    <button class="qty-btn plus" onclick="changeQty(${i}, +1)">+</button>
+                </div>
+                <div class="cart-item-subtotal">S/. ${item.price.toFixed(2)} c/u</div>
+            </div>
+            <button class="cart-item-remove" onclick="removeFromCart(${i})" title="Quitar">✕</button>
         `;
         itemsEl.appendChild(div);
     });
@@ -1789,33 +2828,51 @@ function renderCartPage() {
 function showCheckout() {
     if (cart.length === 0) return;
     const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0).toFixed(2);
-    let msg = ' NUEVO PEDIDO - Plan Ninja Empanada\n\n';
+    let msg = '🥟 NUEVO PEDIDO - Plan Ninja Empanada\n\n';
     cart.forEach(item => {
         msg += `• ${item.qty}x ${item.name} - S/. ${(item.price * item.qty).toFixed(2)}\n`;
     });
     msg += `\n💰 *TOTAL: S/. ${total}*\n`;
-    msg += '\n Por favor indícame tu dirección de entrega. ¡Gracias!';
-    const url = 'https://wa.me/51996989580?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank');
+    msg += '\n📍 Por favor indícame tu dirección de entrega. ¡Gracias!';
+    window._pedidoMsg = msg;
+    const list = document.getElementById('checkout-list');
+    list.innerHTML = '';
+    CONTACTOS.forEach(c => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'checkout-wa';
+        btn.textContent = `📲 ${c.display} (${c.label})`;
+        btn.onclick = () => {
+            const url = 'https://wa.me/' + c.tel + '?text=' + encodeURIComponent(window._pedidoMsg);
+            window.open(url, '_blank');
+        };
+        list.appendChild(btn);
+    });
+    const wrap = document.getElementById('checkout-contacts');
+    wrap.classList.remove('hidden');
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // ---- MENU FILTER ----
 function filterMenu(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    // 'clasica' y 'premium' filtran por línea de precio; el resto, por sabor
+    const isLine = (cat === 'clasica' || cat === 'premium');
     document.querySelectorAll('.menu-card').forEach(card => {
-        if (cat === 'todos' || card.dataset.cat === cat) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
+        const show = cat === 'todos' || (isLine ? card.dataset.line === cat : card.dataset.cat === cat);
+        card.style.display = show ? '' : 'none';
+    });
+    document.querySelectorAll('.menu-divider').forEach(d => {
+        d.style.display = (!isLine || d.dataset.line === cat) ? '' : 'none';
     });
 }
 
 // ---- TOAST ----
-function showToast(msg) {
+function showToast(msg, gold = false) {
     const toast = document.getElementById('toast');
     toast.textContent = msg;
+    toast.classList.toggle('toast-gold', gold);
     toast.classList.remove('hidden');
     clearTimeout(window._toastTimer);
     window._toastTimer = setTimeout(() => {
@@ -1832,7 +2889,7 @@ function checkHorario() {
     const isSaturday = now.getDay() === 6;
     const isOpen = isSaturday && hour >= 9 && hour < 17;
     if (isOpen) {
-        badge.textContent = ' ABIERTO AHORA';
+        badge.textContent = '🟢 ABIERTO AHORA';
         badge.className = 'status-badge status-open';
     } else {
         badge.textContent = '🔴 CERRADO';

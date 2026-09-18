@@ -1,0 +1,1832 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Ninja Empanada | Cusco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+/* ============================================
+PLAN NINJA EMPANADA - CSS STYLES
+Línea gráfica: Violeta / Morado Oscuro Elegante
+============================================ */
+:root {
+    --purple-deep: #1a0a2e;
+    --purple-dark: #2d1557;
+    --purple-mid: #4a2080;
+    --purple-accent: #7b3fc4;
+    --purple-bright: #9d5dd4;
+    --purple-light: #c39de8;
+    --purple-glow: #b06ae4;
+    --gold: #f0c040;
+    --gold-dark: #c9950f;
+    --white: #f5f0ff;
+    --white-dim: rgba(245, 240, 255, 0.85);
+    --surface: rgba(74, 32, 128, 0.25);
+    --surface-2: rgba(45, 21, 87, 0.6);
+    --border: rgba(157, 93, 212, 0.3);
+    --text-muted: rgba(195, 157, 232, 0.75);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 4px 24px rgba(74,32,128,0.4);
+    --shadow-gold: 0 0 20px rgba(240,192,64,0.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--purple-deep);
+    color: var(--white);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+/* ---- SPLASH ---- */
+.splash {
+    position: fixed; inset: 0;
+    background: linear-gradient(145deg, #0d0520 0%, #2d1557 50%, #1a0a2e 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease;
+}
+.splash.fade-out { opacity: 0; pointer-events: none; }
+.splash-inner { text-align: center; }
+.ninja-logo {
+    position: relative; width: 110px; height: 110px;
+    margin: 0 auto 20px;
+}
+.logo-ring {
+    position: absolute; inset: 0;
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    animation: spin 3s linear infinite;
+    border-top-color: transparent;
+}
+.logo-star {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.splash-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem; font-weight: 900;
+    line-height: 1.1;
+    color: var(--white);
+}
+.splash-title span { color: var(--gold); }
+.splash-sub { color: var(--purple-light); margin: 10px 0 24px; font-size: 1rem; }
+.splash-loader {
+    width: 200px; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px; margin: 0 auto;
+    overflow: hidden;
+}
+.loader-bar {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--purple-accent), var(--gold));
+    border-radius: 2px;
+    animation: load 1.8s ease-in-out forwards;
+}
+@keyframes load { to { width: 100%; } }
+/* ---- APP ---- */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+.hidden { display: none !important; }
+/* ---- TOPBAR ---- */
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 60px;
+    background: var(--purple-dark);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 16px;
+    gap: 12px; z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+.topbar-menu {
+    background: none; border: none; color: var(--white);
+    font-size: 1.5rem; cursor: pointer; padding: 4px;
+}
+.topbar-logo {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+}
+.logo-emoji { font-size: 1.6rem; }
+.logo-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem; font-weight: 700;
+    line-height: 1.2; color: var(--white);
+}
+.logo-text small { color: var(--gold); font-size: 0.7rem; }
+.cart-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--white); padding: 8px 14px; border-radius: 50px;
+    font-size: 1rem; cursor: pointer; position: relative;
+    transition: background 0.2s;
+}
+.cart-btn:hover { background: var(--purple-accent); }
+.cart-badge {
+    background: var(--gold); color: var(--purple-deep);
+    border-radius: 50%; width: 18px; height: 18px;
+    font-size: 0.7rem; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-left: 4px;
+}
+/* ---- SIDEBAR ---- */
+.sidebar {
+    position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
+    background: linear-gradient(180deg, #1a0a2e 0%, #2d1557 100%);
+    border-right: 1px solid var(--border);
+    z-index: 200; transition: left 0.3s ease;
+    overflow-y: auto; padding-bottom: 40px;
+}
+.sidebar.open { left: 0; }
+.overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 150;
+}
+.sidebar-header {
+    padding: 24px 20px;
+    background: var(--surface-2);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    margin-top: 0;
+}
+.ninja-avatar { font-size: 3rem; margin-bottom: 8px; }
+.sidebar-header h3 {
+    font-family: 'Cinzel', serif; font-size: 0.9rem;
+    color: var(--gold);
+}
+.sidebar-header p { color: var(--purple-light); font-size: 0.8rem; margin-top: 4px; }
+.nav-list { list-style: none; padding: 12px 0; }
+.nav-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px; cursor: pointer;
+    color: var(--white-dim); font-size: 0.95rem; font-weight: 600;
+    transition: all 0.2s; border-left: 3px solid transparent;
+}
+.nav-link:hover, .nav-link.active {
+    background: var(--surface);
+    color: var(--gold);
+    border-left-color: var(--gold);
+}
+.nav-link span { font-size: 1.2rem; }
+.sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+.sidebar-footer p { color: var(--purple-light); font-size: 0.85rem; margin: 6px 0; }
+/* ---- MAIN ---- */
+.main-content {
+    margin-top: 60px;
+    margin-bottom: 72px;
+    flex: 1;
+    min-height: calc(100vh - 132px);
+}
+.page { display: none; }
+.page.active { display: block; }
+/* ---- HERO ---- */
+.hero {
+    position: relative; min-height: 440px;
+    display: flex; align-items: center;
+    overflow: hidden;
+}
+.hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0d0520 0%, #2d1557 40%, #4a2080 70%, #1a0a2e 100%);
+}
+.hero-bg::before {
+    content: '🥟';
+    position: absolute; font-size: 220px; opacity: 0.05;
+    right: -40px; top: 50%; transform: translateY(-50%);
+}
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    position: relative;
+    padding: 32px 20px;
+    z-index: 1;
+}
+.hero-text {
+    flex: 1;
+    min-width: 0;
+}
+.hero-image {
+    flex: 0 1 560px;
+    max-width: min(48vw, 560px);
+}
+.hero-image img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+/* ---- HERO BATTLE FX: viento, rayos y cortes de espada ---- */
+.hero-fx {
+    position: absolute; inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+/* Viento: rachas diagonales que cruzan la escena */
+.wind-line {
+    position: absolute;
+    height: 2px;
+    width: 40%;
+    left: -45%;
+    background: linear-gradient(90deg, transparent, rgba(245,240,255,0.55), transparent);
+    transform: rotate(-8deg);
+    opacity: 0;
+    animation: windGust 3.6s ease-in infinite;
+    filter: blur(0.3px);
+}
+.wind-line.w2 { top: 22%; width: 55%; animation-duration: 4.2s; animation-delay: 0.6s; }
+.wind-line.w3 { top: 38%; width: 32%; animation-duration: 3s; animation-delay: 1.4s; height: 1.5px; }
+.wind-line.w4 { top: 58%; width: 48%; animation-duration: 3.8s; animation-delay: 0.2s; }
+.wind-line.w5 { top: 72%; width: 30%; animation-duration: 3.3s; animation-delay: 2s; height: 1.5px; }
+.wind-line.w6 { top: 85%; width: 42%; animation-duration: 4.6s; animation-delay: 1s; }
+.wind-line.w1 { top: 12%; }
+@keyframes windGust {
+    0% { transform: translateX(0) rotate(-8deg); opacity: 0; }
+    8% { opacity: 0.8; }
+    45% { opacity: 0.5; }
+    65% { opacity: 0; }
+    100% { transform: translateX(260%) rotate(-8deg); opacity: 0; }
+}
+/* Rayos: destellos irregulares tipo tormenta ninja */
+.lightning-flash {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 78% 30%, rgba(240,192,64,0.35), rgba(157,93,212,0.12) 45%, transparent 70%);
+    opacity: 0;
+    animation: lightningFlash 6.5s ease-in-out infinite;
+}
+.lightning-flash.f2 { animation-duration: 9s; animation-delay: 2.4s; background: radial-gradient(circle at 30% 60%, rgba(245,240,255,0.25), transparent 60%); }
+.lightning-flash.f3 { animation-duration: 7.8s; animation-delay: 4.8s; }
+@keyframes lightningFlash {
+    0%, 92%, 100% { opacity: 0; }
+    93% { opacity: 1; }
+    94% { opacity: 0.15; }
+    95% { opacity: 0.9; }
+    97% { opacity: 0; }
+}
+.lightning-bolt {
+    position: absolute;
+    top: -10%;
+    width: 60px; height: 55%;
+    opacity: 0;
+    filter: drop-shadow(0 0 10px rgba(240,192,64,0.9));
+    animation: boltStrike 6.5s ease-in infinite;
+}
+.lightning-bolt.b2 { left: 22%; animation-duration: 9s; animation-delay: 2.4s; transform: scaleX(-1); }
+.lightning-bolt.b1 { right: 12%; }
+@keyframes boltStrike {
+    0%, 91%, 100% { opacity: 0; }
+    92% { opacity: 1; }
+    93% { opacity: 0.2; }
+    94% { opacity: 1; }
+    96% { opacity: 0; }
+}
+/* Cortes de katana: destellos de energía cruzando la escena */
+.slash-mark {
+    position: absolute;
+    height: 3px;
+    width: 46%;
+    background: linear-gradient(90deg, transparent, rgba(240,192,64,0.9), rgba(255,255,255,0.9), rgba(240,192,64,0.9), transparent);
+    border-radius: 4px;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px rgba(240,192,64,0.8));
+    animation: slashStrike 5s ease-in infinite;
+}
+.slash-mark.s1 { top: 30%; right: 6%; transform: rotate(35deg); animation-delay: 1.2s; }
+.slash-mark.s2 { top: 55%; right: 14%; transform: rotate(-28deg); animation-delay: 3.4s; animation-duration: 5.6s; }
+@keyframes slashStrike {
+    0%, 78%, 100% { opacity: 0; transform-origin: center; }
+    79% { opacity: 1; transform: rotate(35deg) scaleX(0.2); }
+    82% { opacity: 1; transform: rotate(35deg) scaleX(1.1); }
+    86% { opacity: 0; transform: rotate(35deg) scaleX(1.1); }
+}
+.slash-mark.s2 { animation-name: slashStrike2; }
+@keyframes slashStrike2 {
+    0%, 78%, 100% { opacity: 0; }
+    79% { opacity: 1; transform: rotate(-28deg) scaleX(0.2); }
+    82% { opacity: 1; transform: rotate(-28deg) scaleX(1.1); }
+    86% { opacity: 0; transform: rotate(-28deg) scaleX(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero-fx { display: none; }
+}
+.hero-badge {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--purple-light);
+    padding: 6px 16px; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 700;
+    letter-spacing: 0.05em; margin-bottom: 16px;
+    text-transform: uppercase;
+}
+.hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.6rem; font-weight: 900;
+    line-height: 1.1; color: var(--white);
+    margin-bottom: 14px;
+}
+.hero-title .glow {
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(240,192,64,0.6);
+}
+.hero-sub {
+    color: var(--white-dim); font-size: 1rem;
+    line-height: 1.6; margin-bottom: 24px;
+    max-width: 340px;
+}
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.btn-primary {
+    background: linear-gradient(135deg, var(--purple-accent), var(--purple-bright));
+    color: white; border: none; padding: 13px 24px;
+    border-radius: 50px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(123,63,196,0.5); }
+.btn-secondary {
+    background: transparent; color: var(--gold);
+    border: 2px solid var(--gold); padding: 11px 22px;
+    border-radius: 50px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { background: var(--gold); color: var(--purple-deep); }
+.hero-price-tag {
+    background: var(--gold); color: var(--purple-deep);
+    display: inline-block; padding: 8px 20px;
+    border-radius: 50px; font-size: 0.95rem; font-weight: 800;
+}
+/* ---- STATS BAR ---- */
+.stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+.stat {
+    padding: 16px 8px; text-align: center;
+    border-right: 1px solid var(--border);
+}
+.stat:last-child { border-right: none; }
+.stat-num {
+    display: block; font-family: 'Cinzel', serif;
+    font-size: 1.1rem; font-weight: 700; color: var(--gold);
+}
+.stat-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+/* ---- CARDS GRID ---- */
+.section-block { padding: 28px 16px; }
+.section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem; color: var(--gold);
+    margin-bottom: 20px; text-align: center;
+}
+.cards-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.product-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 40px rgba(74,32,128,0.6);
+    border-color: var(--purple-accent);
+}
+.product-card.popular { border-color: var(--gold); }
+.popular-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--gold); color: var(--purple-deep);
+    padding: 4px 10px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 800;
+}
+.card-emoji { font-size: 2.8rem; margin-bottom: 12px; }
+.product-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem; margin-bottom: 8px; color: var(--white);
+}
+.product-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; }
+.card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 16px;
+}
+.price { font-size: 1.3rem; font-weight: 800; color: var(--gold); }
+.add-btn {
+    background: var(--purple-accent); color: white;
+    border: none; padding: 8px 16px; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 700; cursor: pointer;
+    transition: background 0.2s;
+}
+.add-btn:hover { background: var(--purple-bright); }
+/* ---- PROMO BANNERS ---- */
+.promo-banners {
+    padding: 0 16px 28px;
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.promo-card {
+    background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+    border: 1px solid var(--gold); border-radius: var(--radius);
+    padding: 18px; display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: transform 0.2s;
+}
+.promo-card:hover { transform: scale(1.02); }
+.promo-icon { font-size: 2rem; }
+.promo-card div { flex: 1; font-size: 0.9rem; line-height: 1.4; }
+.promo-price {
+    font-size: 1.3rem; font-weight: 800; color: var(--gold);
+    white-space: nowrap;
+}
+/* ---- INFO STRIP ---- */
+.info-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+}
+.info-item {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 16px 8px; gap: 6px;
+    border-right: 1px solid var(--border);
+    font-size: 0.8rem;
+}
+.info-item:last-child { border-right: none; }
+.info-item span { font-size: 1.5rem; }
+.info-item strong { color: var(--gold); display: block; font-size: 0.8rem; }
+.info-item div { color: var(--text-muted); }
+/* ---- PAGE HEADER ---- */
+.page-header {
+    padding: 28px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+}
+.page-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem; color: var(--gold);
+}
+.page-header p { color: var(--text-muted); margin-top: 4px; }
+/* ---- MENU PAGE ---- */
+.filter-tabs {
+    display: flex; gap: 8px; padding: 16px;
+    overflow-x: auto; scrollbar-width: none;
+}
+.filter-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--white-dim); padding: 8px 18px; border-radius: 50px;
+    font-size: 0.88rem; font-weight: 700; cursor: pointer;
+    white-space: nowrap; transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover {
+    background: var(--purple-accent); border-color: var(--purple-accent);
+    color: white;
+}
+.menu-grid { padding: 8px 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.menu-card {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+    display: flex; gap: 14px; align-items: flex-start;
+    transition: border-color 0.2s;
+}
+.menu-card:hover { border-color: var(--purple-accent); }
+.menu-emoji { font-size: 2.6rem; flex-shrink: 0; }
+.menu-info { flex: 1; }
+.menu-info h3 { font-family: 'Cinzel', serif; font-size: 1rem; margin-bottom: 6px; }
+.menu-info p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
+.menu-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.tag {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 700; color: var(--purple-light);
+}
+.tag-hot { background: rgba(200,50,30,0.2); border-color: #e55; color: #f88; }
+.tag-gold { background: rgba(240,192,64,0.15); border-color: var(--gold); color: var(--gold); }
+.menu-action { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+.price-big { font-size: 1.15rem; font-weight: 800; color: var(--gold); }
+.btn-add {
+    background: var(--purple-accent); color: white;
+    border: none; padding: 8px 14px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 700; cursor: pointer;
+    white-space: nowrap; transition: background 0.2s;
+}
+.btn-add:hover { background: var(--purple-bright); }
+/* ---- COMBOS PAGE ---- */
+.combos-grid {
+    padding: 20px 16px;
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+}
+.combo-card {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px;
+    position: relative; transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+}
+.combo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.combo-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(45,21,87,0.9), rgba(74,32,128,0.6));
+    box-shadow: var(--shadow-gold);
+}
+.combo-badge {
+    position: absolute; top: -10px; left: 20px;
+    background: var(--purple-accent); color: white;
+    padding: 4px 14px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.combo-badge.hot { background: var(--gold); color: var(--purple-deep); }
+.combo-badge.new { background: #2a9d3f; }
+.combo-emoji { font-size: 3rem; margin: 8px 0 12px; }
+.combo-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem; color: var(--white); margin-bottom: 4px;
+}
+.combo-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 14px; }
+.combo-list { list-style: none; margin-bottom: 16px; }
+.combo-list li { padding: 4px 0; font-size: 0.9rem; color: var(--white-dim); }
+.combo-prices { margin-bottom: 18px; margin-top: auto; }
+.original { display: block; color: var(--text-muted); font-size: 0.8rem; text-decoration: line-through; }
+.combo-price { font-size: 1.7rem; font-weight: 800; color: var(--gold); }
+.btn-combo {
+    width: 100%; padding: 12px;
+    background: var(--purple-accent);
+    color: white; border: none; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+.btn-combo:hover { background: var(--purple-bright); transform: scale(1.02); }
+/* Oferta especial: ocupa una fila propia y se mantiene centrada en cualquier pantalla. */
+.real-ninja-card {
+    grid-column: 1 / -1;
+    width: min(100%, 480px);
+    justify-self: center;
+    text-align: center;
+    overflow: hidden;
+    border-color: rgba(240, 192, 64, 0.8);
+    background:
+        radial-gradient(circle at 50% 0%, rgba(240, 192, 64, 0.2), transparent 46%),
+        linear-gradient(145deg, rgba(74, 32, 128, 0.96), rgba(20, 7, 47, 0.98));
+    box-shadow: 0 18px 45px rgba(0,0,0,0.3), 0 0 34px rgba(240,192,64,0.18);
+}
+.real-ninja-card .combo-badge { left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.real-ninja-card .combo-emoji { font-size: 3.6rem; margin-top: 16px; filter: drop-shadow(0 0 12px rgba(240,192,64,0.45)); }
+.real-ninja-highlight {
+    display: inline-block;
+    margin: 2px 0 10px;
+    padding: 5px 12px;
+    border: 1px solid rgba(240,192,64,0.45);
+    border-radius: 50px;
+    color: var(--gold);
+    background: rgba(240,192,64,0.08);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.real-ninja-card .combo-desc { max-width: 330px; margin: 0 auto 14px; }
+.real-ninja-card .combo-list { display: inline-block; text-align: left; }
+.real-ninja-card .combo-price { display: block; font-size: clamp(2rem, 7vw, 2.55rem); text-shadow: 0 0 20px rgba(240,192,64,0.35); }
+.real-ninja-card .btn-combo { max-width: 330px; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: var(--purple-deep); }
+.real-ninja-card .btn-combo:hover { background: #ffd65e; }
+@media (max-width: 480px) {
+    .combos-grid { padding: 28px 12px 20px; grid-template-columns: minmax(0, 1fr); }
+    .combo-card { min-width: 0; padding: 22px 18px; }
+    .real-ninja-card { width: 100%; }
+    .real-ninja-card .combo-badge { font-size: 0.66rem; }
+}
+/* ---- FONDO AMBIENTAL COMBOS: aura viva de los tres sabores ---- */
+#page-combos { position: relative; overflow: hidden; }
+#page-combos .page-header,
+#page-combos .combos-grid { position: relative; z-index: 1; }
+.combos-bg-fx {
+    position: absolute;
+    inset: -6%;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url('assets/tres-sabores.png.png');
+    background-repeat: no-repeat;
+    background-position: center 28%;
+    background-size: min(1400px, 165%);
+    opacity: 0.16;
+    mix-blend-mode: screen;
+    filter: saturate(1.35) contrast(1.05) hue-rotate(0deg);
+    animation: comboAuraBreathe 9s ease-in-out infinite, comboAuraHue 16s linear infinite;
+}
+.combos-bg-fx::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 32%, transparent 15%, var(--purple-deep) 76%),
+                linear-gradient(180deg, rgba(26,10,46,0.15) 0%, rgba(26,10,46,0.95) 100%);
+}
+.combos-bg-fx::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(240,192,64,0.16), transparent 55%);
+    mix-blend-mode: overlay;
+    animation: comboAuraGlow 5s ease-in-out infinite;
+}
+@keyframes comboAuraBreathe {
+    0%, 100% { transform: scale(1) translateY(0); opacity: 0.14; }
+    50% { transform: scale(1.09) translateY(-1.5%); opacity: 0.24; }
+}
+@keyframes comboAuraHue {
+    0% { filter: saturate(1.35) contrast(1.05) hue-rotate(0deg); }
+    50% { filter: saturate(1.35) contrast(1.05) hue-rotate(18deg); }
+    100% { filter: saturate(1.35) contrast(1.05) hue-rotate(0deg); }
+}
+@keyframes comboAuraGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .combos-bg-fx { animation: none; }
+}
+/* ---- CARRITO PAGE ---- */
+.cart-empty {
+    text-align: center; padding: 60px 20px;
+}
+.empty-icon { font-size: 4rem; margin-bottom: 16px; }
+.cart-empty h3 { font-size: 1.3rem; margin-bottom: 8px; }
+.cart-empty p { color: var(--text-muted); margin-bottom: 24px; }
+.cart-items { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.cart-item {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px;
+    display: flex; align-items: center; gap: 12px;
+}
+.cart-item-name { flex: 1; font-weight: 700; font-size: 0.95rem; }
+.cart-item-price { color: var(--gold); font-weight: 800; font-size: 1rem; }
+.cart-item-remove {
+    background: rgba(200,50,50,0.2); border: 1px solid rgba(200,50,50,0.4);
+    color: #f88; padding: 4px 10px; border-radius: 50px;
+    font-size: 0.75rem; cursor: pointer; font-weight: 700;
+}
+.cart-item-qty {
+    display: flex; align-items: center; gap: 8px;
+}
+.qty-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--white); width: 28px; height: 28px; border-radius: 50%;
+    font-size: 1rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+}
+.qty-val { font-weight: 700; min-width: 20px; text-align: center; }
+.cart-summary {
+    margin: 0 16px 20px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+}
+.summary-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+.summary-row.total {
+    border-bottom: none; margin-top: 8px;
+    font-size: 1.2rem; font-weight: 800; color: var(--gold);
+}
+.free-delivery { color: #4caf50; font-weight: 700; }
+.btn-checkout {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #25d366, #1da851);
+    color: white; border: none; border-radius: 50px;
+    font-size: 1rem; font-weight: 800; cursor: pointer;
+    margin-top: 16px; transition: transform 0.2s;
+}
+.btn-checkout:hover { transform: scale(1.02); }
+.btn-clear {
+    width: 100%; padding: 10px;
+    background: transparent; color: #f88;
+    border: 1px solid rgba(200,50,50,0.4); border-radius: 50px;
+    font-size: 0.85rem; font-weight: 700; cursor: pointer;
+    margin-top: 10px;
+}
+/* ---- PEDIDO ---- */
+.tracking-card {
+    margin: 20px 16px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px;
+}
+.tracking-info { text-align: center; margin-bottom: 28px; }
+.tracking-info p { color: var(--text-muted); margin-bottom: 14px; }
+.btn-wa {
+    display: inline-block;
+    background: #25d366; color: white;
+    padding: 12px 24px; border-radius: 50px;
+    font-weight: 700; font-size: 0.95rem;
+    text-decoration: none; transition: transform 0.2s;
+}
+.btn-wa:hover { transform: scale(1.03); }
+.tracking-steps { display: flex; flex-direction: column; gap: 4px; }
+.step {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    opacity: 0.45;
+}
+.step:last-child { border-bottom: none; }
+.step.done { opacity: 1; }
+.step-icon { font-size: 1.5rem; flex-shrink: 0; }
+.step strong { display: block; font-size: 0.95rem; }
+.step p { color: var(--text-muted); font-size: 0.82rem; margin-top: 2px; }
+/* ---- CONTACTO ---- */
+.contact-grid {
+    padding: 20px 16px;
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.contact-card {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px; text-align: center;
+}
+.contact-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.contact-card h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); margin-bottom: 8px; }
+.contact-val { font-size: 0.95rem; line-height: 1.5; color: var(--white-dim); margin-bottom: 14px; }
+.contact-numbers { display: grid; gap: 4px; }
+.contact-numbers a { color: var(--white-dim); text-decoration: none; font-weight: 700; }
+.contact-numbers a:hover { color: var(--gold); }
+.contact-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.contact-actions .btn-wa { margin: 0; }
+.contact-time { font-size: 1.4rem; font-weight: 800; color: var(--gold); }
+.status-badge {
+    display: inline-block; padding: 6px 16px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 700; margin-top: 10px;
+}
+.status-open { background: rgba(76,175,80,0.2); color: #4caf50; border: 1px solid #4caf50; }
+.status-closed { background: rgba(200,50,50,0.2); color: #f66; border: 1px solid #f66; }
+.map-placeholder {
+    margin: 0 16px 24px;
+    background-image:
+        linear-gradient(100deg, rgba(26,10,46,0.97) 0%, rgba(45,21,87,0.92) 58%, rgba(45,21,87,0.62) 100%),
+        url('assets/tres-sabores.png.png');
+    background-position: center, right 7% center;
+    background-repeat: no-repeat;
+    background-size: cover, min(430px, 42vw);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    min-height: 200px; display: flex; align-items: center; justify-content: center;
+}
+.map-inner { text-align: center; padding: 32px; position: relative; z-index: 1; }
+.map-pin { font-size: 3rem; display: block; margin-bottom: 12px; }
+.map-inner h3 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.1rem; }
+.map-inner p { color: var(--text-muted); margin-top: 4px; }
+.map-link { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; }
+@media (max-width: 640px) {
+    .map-placeholder { background-position: center, center 92%; background-size: cover, min(310px, 76vw); }
+    .map-inner { padding: 28px 18px 180px; }
+    .contact-time { font-size: 1.12rem; }
+}
+/* ---- NOSOTROS ---- */
+.about-hero {
+    text-align: center; padding: 32px 20px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+}
+.about-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+.about-hero h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem; color: var(--gold); margin-bottom: 14px;
+}
+.about-hero p { color: var(--text-muted); line-height: 1.7; max-width: 500px; margin: 0 auto; }
+.values-grid {
+    display: grid; gap: 14px; padding: 24px 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.value-card {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 20px; text-align: center;
+}
+.value-card span { font-size: 2rem; display: block; margin-bottom: 8px; }
+.value-card h4 { font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--gold); margin-bottom: 6px; }
+.value-card p { color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; }
+.reviews-grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.review-card {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 20px;
+}
+.stars { font-size: 1rem; margin-bottom: 10px; }
+.review-card p { color: var(--white-dim); font-size: 0.88rem; line-height: 1.6; font-style: italic; margin-bottom: 10px; }
+.review-card strong { color: var(--gold); font-size: 0.82rem; }
+/* ---- BOTTOM NAV ---- */
+.bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 68px;
+    background: var(--purple-dark);
+    border-top: 1px solid var(--border);
+    display: flex; z-index: 100;
+}
+.bnav-btn {
+    flex: 1; background: none; border: none; cursor: pointer;
+    color: var(--text-muted); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    font-size: 1.3rem; transition: color 0.2s;
+}
+.bnav-btn small { font-size: 0.62rem; font-weight: 700; }
+.bnav-btn.active { color: var(--gold); }
+.bnav-btn:hover { color: var(--purple-light); }
+/* ---- TOAST ---- */
+.toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    background: var(--purple-accent); color: white;
+    padding: 12px 24px; border-radius: 50px;
+    font-weight: 700; font-size: 0.9rem;
+    box-shadow: var(--shadow); z-index: 1000;
+    animation: toastIn 0.3s ease;
+    white-space: nowrap;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+/* ---- RESPONSIVE ---- */
+@media (max-width: 480px) {
+    .hero-title { font-size: 2rem; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stats-bar .stat:nth-child(2) { border-right: none; }
+    .info-strip { grid-template-columns: 1fr; }
+    .info-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .info-item:last-child { border-bottom: none; }
+}
+/* ---- NINJA VISUAL REFRESH ---- */
+body {
+    background:
+    radial-gradient(circle at 18% 12%, rgba(157, 93, 212, 0.26), transparent 28%),
+    radial-gradient(circle at 84% 8%, rgba(240, 192, 64, 0.12), transparent 24%),
+    linear-gradient(145deg, #07020f 0%, #1a0a2e 42%, #08030f 100%);
+}
+.starfield,
+.starfield span,
+.starfield::before,
+.starfield::after {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.starfield { z-index: 0; }
+.app { position: relative; z-index: 1; isolation: isolate; }
+.splash { z-index: 9999; }
+.topbar, .bottom-nav, .sidebar, .overlay, .toast { isolation: isolate; }
+.starfield::before,
+.starfield::after,
+.starfield span {
+    content: '';
+    background-repeat: repeat;
+    opacity: 0.72;
+    mix-blend-mode: screen;
+    will-change: transform;
+}
+.starfield::before {
+    background-image:
+    radial-gradient(circle, rgba(255,255,255,0.95) 0 1px, transparent 1.8px),
+    radial-gradient(circle, rgba(176,106,228,0.75) 0 1px, transparent 2px);
+    background-size: 92px 92px, 137px 137px;
+    animation: starRain 24s linear infinite;
+}
+.starfield::after {
+    background-image:
+    radial-gradient(circle, rgba(240,192,64,0.9) 0 1px, transparent 2.2px),
+    radial-gradient(circle, rgba(195,157,232,0.75) 0 1px, transparent 2px);
+    background-size: 164px 164px, 118px 118px;
+    animation: starRainSoft 36s linear infinite;
+    opacity: 0.42;
+}
+.starfield span:nth-child(1) {
+    background-image: linear-gradient(115deg, transparent 0 46%, rgba(255,255,255,0.8) 48%, transparent 53%);
+    background-size: 220px 160px;
+    animation: shootingStars 9s ease-in-out infinite;
+    opacity: 0.22;
+}
+.starfield span:nth-child(2) {
+    background-image: radial-gradient(circle, rgba(157,93,212,0.28) 0 1px, transparent 2px);
+    background-size: 58px 58px;
+    animation: starRain 15s linear infinite reverse;
+    opacity: 0.55;
+}
+.starfield span:nth-child(3) {
+    background: radial-gradient(circle at 70% 20%, rgba(123,63,196,0.18), transparent 32%), radial-gradient(circle at 20% 80%, rgba(0,0,0,0.42), transparent 34%);
+    animation: cosmicGlow 12s ease-in-out infinite alternate;
+}
+@keyframes starRain {
+    from { transform: translate3d(0, -90px, 0); }
+    to { transform: translate3d(-80px, 120px, 0); }
+}
+@keyframes starRainSoft {
+    from { transform: translate3d(0, -150px, 0) rotate(0.001deg); }
+    to { transform: translate3d(90px, 180px, 0) rotate(0.001deg); }
+}
+@keyframes shootingStars {
+    0%, 38%, 100% { transform: translate3d(-35%, -20%, 0); opacity: 0; }
+    48% { opacity: 0.34; }
+    62% { transform: translate3d(45%, 45%, 0); opacity: 0; }
+}
+@keyframes cosmicGlow {
+    from { transform: scale(1); opacity: 0.7; }
+    to { transform: scale(1.08); opacity: 1; }
+}
+.hero-bg {
+    background:
+    radial-gradient(circle at 78% 34%, rgba(240,192,64,0.16), transparent 18%),
+    radial-gradient(circle at 18% 20%, rgba(157,93,212,0.34), transparent 26%),
+    linear-gradient(135deg, #06020d 0%, #2d1557 45%, #090313 100%);
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: auto -12% -36% 42%;
+    height: 280px;
+    background: radial-gradient(ellipse, rgba(157, 93, 212, 0.24), transparent 68%);
+    filter: blur(10px);
+    animation: heroAura 7s ease-in-out infinite alternate;
+}
+@keyframes heroAura {
+    from { transform: translateY(12px) scale(0.96); opacity: 0.55; }
+    to { transform: translateY(-8px) scale(1.05); opacity: 0.95; }
+}
+.product-card,
+.menu-card,
+.combo-card,
+.contact-card,
+.tracking-card,
+.cart-summary,
+.cart-item,
+.value-card,
+.review-card,
+.map-placeholder,
+.promo-card {
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.product-card::before,
+.menu-card::before,
+.combo-card::before,
+.contact-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.07) 42%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.65s ease;
+    pointer-events: none;
+}
+.product-card:hover::before,
+.menu-card:hover::before,
+.combo-card:hover::before,
+.contact-card:hover::before { transform: translateX(120%); }
+.menu-card, .contact-card { position: relative; overflow: hidden; }
+.card-image {
+    width: min(170px, 48vw);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: -6px auto 14px;
+    border-radius: 14px;
+    background: radial-gradient(circle at 50% 62%, rgba(240,192,64,0.22), transparent 52%);
+}
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 22px rgba(0,0,0,0.44));
+    animation: ninjaFloat 4.8s ease-in-out infinite;
+}
+.product-card:nth-child(2) .card-image img { animation-delay: -1.2s; }
+.product-card:nth-child(3) .card-image img { animation-delay: -2.4s; }
+.menu-image {
+    width: 82px;
+    min-width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: radial-gradient(circle, rgba(176,106,228,0.18), rgba(0,0,0,0.08) 68%, transparent 70%);
+}
+.menu-image img {
+    width: 94px;
+    height: 94px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 14px rgba(0,0,0,0.48));
+    animation: ninjaFloat 5.2s ease-in-out infinite;
+}
+.menu-card:nth-child(2n) .menu-image img { animation-delay: -1.6s; }
+.menu-card:nth-child(3n) .menu-image img { animation-delay: -2.7s; }
+@keyframes ninjaFloat {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-7px) rotate(1.3deg); }
+}
+.product-card h3,
+.menu-info h3 { text-shadow: 0 0 18px rgba(176,106,228,0.24); }
+@media (min-width: 900px) {
+    .hero { min-height: 460px; }
+    .hero-content { width: 100%; padding: 32px 48px; }
+    .hero-title { font-size: 3.4rem; }
+    .cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .product-card { min-height: 285px; }
+    .menu-card { align-items: center; padding: 18px 20px; }
+}
+@media (max-width: 640px) {
+    .hero { min-height: 500px; align-items: flex-start; }
+    .hero-content { padding: 28px 16px; }
+    .hero-title { font-size: 2.15rem; }
+    .hero-btns .btn-primary,
+    .hero-btns .btn-secondary { flex: 1 1 145px; text-align: center; }
+    .product-card { padding: 18px; }
+    .popular-badge { position: static; display: inline-block; margin-bottom: 8px; }
+    .menu-card { display: grid; grid-template-columns: 76px 1fr; gap: 12px; }
+    .menu-image { width: 72px; min-width: 72px; height: 72px; grid-row: span 2; }
+    .menu-image img { width: 84px; height: 84px; }
+    .menu-action { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; }
+    .btn-add { min-width: 118px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .starfield::before,
+    .starfield::after,
+    .starfield span,
+    .card-image img,
+    .menu-image img,
+    .hero::after { animation: none !important; }
+}
+/* ===== HERO CON IMAGEN - RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+    .hero-image {
+        max-width: 300px;
+        order: -1;
+    }
+    .hero-image img {
+        max-height: 300px;
+    }
+    .hero-btns {
+        justify-content: center;
+    }
+}
+    </style>
+</head>
+<body>
+<div class="starfield" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<!-- SPLASH SCREEN -->
+<div id="splash" class="splash">
+    <div class="splash-inner">
+        <div class="ninja-logo">
+            <div class="logo-ring"></div>
+            <div class="logo-star">🥟</div>
+        </div>
+        <h1 class="splash-title">PLAN NINJA<br><span>EMPANADA</span></h1>
+        <p class="splash-sub">Las mejores empanadas de Cusco</p>
+        <div class="splash-loader">
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app" class="app hidden">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <button class="topbar-menu" onclick="toggleSidebar()">☰</button>
+        <div class="topbar-logo">
+            <span class="logo-emoji">🥟</span>
+            <span class="logo-text">PLAN NINJA<br><small>EMPANADA</small></span>
+        </div>
+        <div class="topbar-right">
+            <button class="cart-btn" onclick="showPage('carrito')">
+                🛒 <span id="cart-count" class="cart-badge">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="ninja-avatar">🥷</div>
+            <h3>Plan Ninja Empanada</h3>
+            <p>Cusco, Perú</p>
+        </div>
+        <ul class="nav-list">
+            <li><a onclick="showPage('inicio')" class="nav-link active"><span>🏠</span> Inicio</a></li>
+            <li><a onclick="showPage('menu')" class="nav-link"><span></span> Menú</a></li>
+            <li><a onclick="showPage('combos')" class="nav-link"><span>🔥</span> Combos & Paquetes</a></li>
+            <li><a onclick="showPage('carrito')" class="nav-link"><span>🛒</span> Mi Carrito</a></li>
+            <li><a onclick="showPage('pedido')" class="nav-link"><span>📦</span> Rastrear Pedido</a></li>
+            <li><a onclick="showPage('contacto')" class="nav-link"><span>📍</span> Contacto</a></li>
+            <li><a onclick="showPage('nosotros')" class="nav-link"><span>⭐</span> Nosotros</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>📞 +51 996 989 580</p>
+            <p> 9 AM – 5 PM</p>
+        </div>
+    </nav>
+    <div id="overlay" class="overlay hidden" onclick="toggleSidebar()"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- INICIO PAGE -->
+        <div id="page-inicio" class="page active">
+            
+            <!-- HERO CON IMAGEN -->
+            <section class="hero">
+                <div class="hero-bg"></div>
+                <div class="hero-fx">
+                    <div class="wind-line w1"></div>
+                    <div class="wind-line w2"></div>
+                    <div class="wind-line w3"></div>
+                    <div class="wind-line w4"></div>
+                    <div class="wind-line w5"></div>
+                    <div class="wind-line w6"></div>
+                    <div class="lightning-flash f1"></div>
+                    <div class="lightning-flash f2"></div>
+                    <div class="lightning-flash f3"></div>
+                    <svg class="lightning-bolt b1" viewBox="0 0 60 200" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="34,0 8,110 26,110 14,200 52,80 32,80" fill="#f0c040"/>
+                    </svg>
+                    <svg class="lightning-bolt b2" viewBox="0 0 60 200" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="34,0 8,110 26,110 14,200 52,80 32,80" fill="#c39de8"/>
+                    </svg>
+                    <div class="slash-mark s1"></div>
+                    <div class="slash-mark s2"></div>
+                </div>
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge">
+                            <span></span> AUTÉNTICO SABOR NINJA
+                        </div>
+                        
+                        <h1 class="hero-title">
+                            Las Empanadas<br>
+                            más <span class="glow">ÉPICAS</span><br>
+                            de Cusco
+                        </h1>
+                        
+                        <p class="hero-sub">
+                            Masa artesanal, rellenos generosos y el sabor que conquista Cusco desde el primer bocado.
+                        </p>
+                        
+                        <div class="hero-btns">
+                            <button class="btn-primary" onclick="showPage('menu')">
+                                <span>🥟</span> Ver Menú
+                            </button>
+                            <button class="btn-secondary" onclick="showPage('combos')">
+                                <span>🔥</span> Ver Combos
+                            </button>
+                        </div>
+                        
+                        <div class="hero-price-tag">
+                            ¡Desde S/. 3.00 por empanada!
+                        </div>
+                    </div>
+                    
+                    <div class="hero-image">
+                        <img src="assets/tres-sabores.png.png" alt="Tres sabores ninja: carne, pollo y mixta">
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATS BAR -->
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-num">S/. 3</span>
+                    <span class="stat-label">Precio único</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">3</span>
+                    <span class="stat-label">Sabores</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">Artesanal</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">⭐ 4.9</span>
+                    <span class="stat-label">Calificación</span>
+                </div>
+            </div>
+
+            <!-- SABORES DESTACADOS -->
+            <section class="section-block">
+                <h2 class="section-title">Nuestros Sabores</h2>
+                <div class="cards-grid">
+                    <div class="product-card popular" onclick="addToCart('Carne', 3)">
+                        <div class="popular-badge">⭐ Más pedida</div>
+                        <div class="card-image"><img src="assets/ninja-carne.png" alt="Ninja carne"></div>
+                        <h3>Carne</h3>
+                        <p>Una deliciosa combinación de carne molida sazonada con cebolla, ajo, comino y pimienta cubierta por la masa crujiente y dorada. Acompañamiento ideal: un toque de salsa picante o limón al gusto.</p>
+                        <div class="card-footer">
+                            <span class="price">S/. 3.00</span>
+                            <button class="add-btn">+ Agregar</button>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Pollo', 3)">
+                        <div class="card-image"><img src="assets/ninja-pollo.png" alt="Ninja pollo"></div>
+                        <h3>Pollo</h3>
+                        <p>Rellena de pollo sazonado y semi jugoso, es un bocado tradicional y reconfortante, la masa crujiente envuelve el relleno con amor y sabor, perfecta para cualquier ocasión.</p>
+                        <div class="card-footer">
+                            <span class="price">S/. 3.00</span>
+                            <button class="add-btn">+ Agregar</button>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Mixta', 3)">
+                        <div class="card-image"><img src="assets/ninja-mixto.png" alt="Ninja mixto"></div>
+                        <h3>Mixta</h3>
+                        <p>Una deliciosa combinación de salchicha, queso, y un toque de orégano, la masa crujiente envuelve este trío de sabores, creando una empanada que te hará sonreír con cada bocado.</p>
+                        <div class="card-footer">
+                            <span class="price">S/. 3.00</span>
+                            <button class="add-btn">+ Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INFO STRIP -->
+            <div class="info-strip">
+                <div class="info-item">
+                    <span>🕘</span>
+                    <strong>Horario</strong>
+                    <div>9:00 AM – 5:00 PM</div>
+                </div>
+                <div class="info-item">
+                    <span>📍</span>
+                    <strong>Dirección</strong>
+                    <div>Urb. Los Licenciados Psj. Loa H-7</div>
+                </div>
+                <div class="info-item">
+                    <span>📞</span>
+                    <strong>Pedidos</strong>
+                    <div>+51 996 989 580</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENÚ PAGE -->
+        <div id="page-menu" class="page">
+            <div class="page-header">
+                <h2>📋 Nuestro Menú</h2>
+                <p>Todas las empanadas artesanales a S/. 3.00</p>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterMenu('todos', this)">Todos</button>
+                <button class="filter-btn" onclick="filterMenu('carne', this)">🥩 Carne</button>
+                <button class="filter-btn" onclick="filterMenu('pollo', this)">🍗 Pollo</button>
+                <button class="filter-btn" onclick="filterMenu('mixto', this)"> Mixto</button>
+            </div>
+
+            <div class="menu-grid" id="menu-grid">
+                <div class="menu-card" data-cat="carne">
+                    <div class="menu-emoji">🥩</div>
+                    <div class="menu-info">
+                        <h3>Empanada de Carne</h3>
+                        <p>Una deliciosa combinación de carne molida sazonada con cebolla, ajo, comino y pimienta cubierta por la masa crujiente y dorada. Acompañamiento ideal: un toque de salsa picante o limón al gusto.</p>
+                        <div class="menu-tags">
+                            <span class="tag">Clásica</span>
+                            <span class="tag">Horneada</span>
+                        </div>
+                    </div>
+                    <div class="menu-action">
+                        <span class="price-big">S/. 3.00</span>
+                        <button class="btn-add" onclick="addToCart('Empanada de Carne', 3)">Agregar </button>
+                    </div>
+                </div>
+
+                <div class="menu-card" data-cat="pollo">
+                    <div class="menu-emoji">🍗</div>
+                    <div class="menu-info">
+                        <h3>Empanada de Pollo</h3>
+                        <p>Rellena de pollo sazonado y semi jugoso, es un bocado tradicional y reconfortante, la masa crujiente envuelve el relleno con amor y sabor, perfecta para cualquier ocasión.</p>
+                        <div class="menu-tags">
+                            <span class="tag tag-gold">⭐ Popular</span>
+                            <span class="tag">Suave</span>
+                        </div>
+                    </div>
+                    <div class="menu-action">
+                        <span class="price-big">S/. 3.00</span>
+                        <button class="btn-add" onclick="addToCart('Empanada de Pollo', 3)">Agregar 🛒</button>
+                    </div>
+                </div>
+
+                <div class="menu-card" data-cat="mixto">
+                    <div class="menu-emoji">🥟</div>
+                    <div class="menu-info">
+                        <h3>Empanada Mixta</h3>
+                        <p>Una deliciosa combinación de salchicha, queso, y un toque de orégano, la masa crujiente envuelve este trío de sabores, creando una empanada que te hará sonreír con cada bocado.</p>
+                        <div class="menu-tags">
+                            <span class="tag">Especial</span>
+                            <span class="tag">Mixta</span>
+                        </div>
+                    </div>
+                    <div class="menu-action">
+                        <span class="price-big">S/. 3.00</span>
+                        <button class="btn-add" onclick="addToCart('Empanada Mixta', 3)">Agregar 🛒</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMBOS PAGE -->
+        <div id="page-combos" class="page">
+            <div class="combos-bg-fx"></div>
+            <div class="page-header">
+                <h2>🔥 Combos & Paquetes</h2>
+                <p>¡Más empanadas, más ahorro!</p>
+            </div>
+
+            <div class="combos-grid">
+                <div class="combo-card">
+                    <div class="combo-emoji">🥷</div>
+                    <h3>Combo Ninja Básico</h3>
+                    <p class="combo-desc">Para el ninja solitario</p>
+                    <ul class="combo-list">
+                        <li>✅ 2 Empanadas (a elegir)</li>
+                        <li>✅ 1 Bebida gaseosa</li>
+                    </ul>
+                    <div class="combo-prices">
+                        <span class="original">Precio normal: S/. 9.00</span>
+                        <span class="combo-price">S/. 8.00</span>
+                    </div>
+                    <button class="btn-combo" onclick="addToCart('Combo Ninja Básico', 8)">🛒 Agregar Combo</button>
+                </div>
+
+                <div class="combo-card featured">
+                    <div class="combo-emoji">⚔️</div>
+                    <h3>Combo Ninja Supremo</h3>
+                    <p class="combo-desc">Para dos ninjas hambrientos</p>
+                    <ul class="combo-list">
+                        <li>✅ 6 Empanadas variadas</li>
+                        <li>✅ 2 Bebidas gaseosas</li>
+                    </ul>
+                    <div class="combo-prices">
+                        <span class="original">Precio normal: S/. 26.00</span>
+                        <span class="combo-price">S/. 22.00</span>
+                    </div>
+                    <button class="btn-combo" onclick="addToCart('Combo Ninja Supremo', 22)">🛒 Agregar Combo</button>
+                </div>
+
+                <div class="combo-card">
+                    <div class="combo-emoji">👨‍👩‍‍👦</div>
+                    <h3>Paquete Familiar</h3>
+                    <p class="combo-desc">Para toda la familia ninja</p>
+                    <ul class="combo-list">
+                        <li>✅ 12 Empanadas mixtas</li>
+                        <li>✅ 4 Bebidas gaseosas</li>
+                    </ul>
+                    <div class="combo-prices">
+                        <span class="original">Precio normal: S/. 52.00</span>
+                        <span class="combo-price">S/. 44.00</span>
+                    </div>
+                    <button class="btn-combo" onclick="addToCart('Paquete Familiar', 44)">🛒 Agregar Combo</button>
+                </div>
+
+                <div class="combo-card">
+                    <div class="combo-emoji"></div>
+                    <h3>Paquete Oficina</h3>
+                    <p class="combo-desc">Para reuniones y equipos</p>
+                    <ul class="combo-list">
+                        <li>✅ 20 Empanadas variadas</li>
+                        <li>✅ Delivery incluido</li>
+                    </ul>
+                    <div class="combo-prices">
+                        <span class="combo-price">S/. 60.00</span>
+                    </div>
+                    <button class="btn-combo" onclick="addToCart('Paquete Oficina', 60)">🛒 Agregar Combo</button>
+                </div>
+
+                <div class="combo-card">
+                    <div class="combo-emoji">🎉</div>
+                    <h3>Paquete Evento</h3>
+                    <p class="combo-desc">Fiestas y celebraciones</p>
+                    <ul class="combo-list">
+                        <li>✅ 50 Empanadas variadas</li>
+                        <li>✅ Delivery gratuito</li>
+                    </ul>
+                    <div class="combo-prices">
+                        <span class="combo-price">S/. 150.00</span>
+                    </div>
+                    <button class="btn-combo" onclick="addToCart('Paquete Evento', 150)"> Agregar Combo</button>
+                </div>
+
+                <div class="combo-card real-ninja-card">
+                    <div class="combo-emoji">🌅</div>
+                    <h3>Combo Real Ninja</h3>
+                    <div class="real-ninja-highlight">Reserva especial</div>
+                    <p class="combo-desc">Se reserva con 3 a 4 días de anticipación</p>
+                    <ul class="combo-list">
+                        <li>✅ 300 Empanadas variadas</li>
+                        <li>✅ Delivery gratuito</li>
+                    </ul>
+                    <div class="combo-prices">
+                        <span class="combo-price">S/. 900.00</span>
+                    </div>
+                    <button class="btn-combo" onclick="addToCart('Combo Real Ninja', 900)">🛒 Agregar Combo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARRITO PAGE -->
+        <div id="page-carrito" class="page">
+            <div class="page-header">
+                <h2>🛒 Mi Carrito</h2>
+            </div>
+
+            <div id="cart-empty" class="cart-empty">
+                <div class="empty-icon">🥟</div>
+                <h3>Tu carrito está vacío</h3>
+                <p>¡Agrega empanadas o combos para empezar!</p>
+                <button class="btn-primary" onclick="showPage('menu')">Ver Menú</button>
+            </div>
+
+            <div id="cart-content" class="hidden">
+                <div class="cart-items" id="cart-items"></div>
+
+                <div class="cart-summary" id="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">S/. 0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery</span>
+                        <span class="free-delivery">GRATIS </span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>TOTAL</span>
+                        <span id="total-price">S/. 0.00</span>
+                    </div>
+                    <button class="btn-checkout" onclick="showCheckout()">📦 Realizar Pedido por WhatsApp</button>
+                    <button class="btn-clear" onclick="clearCart()">🗑️ Vaciar Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PEDIDO PAGE -->
+        <div id="page-pedido" class="page">
+            <div class="page-header">
+                <h2> Estado de Pedido</h2>
+            </div>
+
+            <div class="tracking-card">
+                <div class="tracking-info">
+                    <p>Para rastrear tu pedido, contáctanos directamente:</p>
+                    <a href="https://wa.me/51996989580" class="btn-wa">📲 WhatsApp: +51 996 989 580</a>
+                </div>
+
+                <div class="tracking-steps">
+                    <div class="step done">
+                        <div class="step-icon">✅</div>
+                        <div>
+                            <strong>Pedido recibido</strong>
+                            <p>Confirmamos tu orden</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">👨‍🍳</div>
+                        <div>
+                            <strong>En preparación</strong>
+                            <p>Horneando tus empanadas</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">🛵</div>
+                        <div>
+                            <strong>En camino</strong>
+                            <p>Tu pedido va en ruta</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">🏠</div>
+                        <div>
+                            <strong>Entregado</strong>
+                            <p>¡Buen provecho!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACTO PAGE -->
+        <div id="page-contacto" class="page">
+            <div class="page-header">
+                <h2>📍 Contacto & Ubicación</h2>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <h3>Teléfono / WhatsApp</h3>
+                    <div class="contact-val contact-numbers">
+                        <a href="tel:+51984757668">+51 984 757 668</a>
+                        <a href="tel:+51961711421">+51 961 711 421</a>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="https://wa.me/51984757668?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp 1</a>
+                        <a href="https://wa.me/51961711421?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20empanadas" class="btn-wa" target="_blank" rel="noopener">WhatsApp 2</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>Dirección</h3>
+                    <div class="contact-val">
+                        Urb. Los Licenciados<br>
+                        Psj. Loa H-7<br>
+                        Cusco, Perú
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">🕘</div>
+                    <h3>Horario de Atención</h3>
+                    <div class="contact-val">Todos los sábados &amp; pedidos con anticipación de 3 a 4 días</div>
+                    <div class="contact-time">9:00 AM — 5:00 PM</div>
+                    <div id="status-badge" class="status-badge">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="map-placeholder">
+                <div class="map-inner">
+                    <span class="map-pin">📍</span>
+                    <h3>Urb. Los Licenciados, Psj. Loa H-7</h3>
+                    <p>Cusco, Perú</p>
+                    <a href="https://maps.app.goo.gl/tFbMVevL72wKv6QF9" class="btn-wa map-link" target="_blank" rel="noopener">📍 Abrir ubicación real en Google Maps</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOSOTROS PAGE -->
+        <div id="page-nosotros" class="page">
+            <div class="page-header">
+                <h2>⭐ Sobre Nosotros</h2>
+            </div>
+
+            <div class="about-hero">
+                <div class="about-emoji">🥷</div>
+                <h2>El Espíritu Ninja en cada Empanada</h2>
+                <p>Somos un negocio familiar cusqueño comprometido con la calidad, el sabor auténtico y el mejor precio. Cada empanada es preparada con ingredientes frescos, masa artesanal y el amor por la gastronomía andina.</p>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <span>🌿</span>
+                    <h4>Ingredientes Frescos</h4>
+                    <p>Seleccionamos los mejores insumos del mercado cusqueño cada día.</p>
+                </div>
+                <div class="value-card">
+                    <span>👨‍🍳</span>
+                    <h4>Receta Artesanal</h4>
+                    <p>Masa elaborada a mano con técnica tradicional cusqueña.</p>
+                </div>
+                <div class="value-card">
+                    <span>💜</span>
+                    <h4>Hecho con Amor</h4>
+                    <p>Cada empanada lleva el corazón y la pasión de nuestra familia.</p>
+                </div>
+                <div class="value-card">
+                    <span></span>
+                    <h4>Rápido y Puntual</h4>
+                    <p>Pedidos entregados a tiempo, porque valoramos tu tiempo.</p>
+                </div>
+            </div>
+
+            <section class="section-block">
+                <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+                <div class="reviews-grid">
+                    <div class="review-card">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"Las mejores empanadas de Cusco, sin duda. La de pollo es increíble!"</p>
+                        <strong>— Ana G., Cusco</strong>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"Pedí el Paquete Familiar para el cumpleaños de mi hijo y todos quedaron felices. ¡Volvemos siempre!"</p>
+                        <strong>— Carlos M.</strong>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"Riquísimas y súper accesibles. S/. 3 es una ganga. El delivery fue rapidísimo."</p>
+                        <strong>— Lucía P.</strong>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <button class="bnav-btn active" id="bn-inicio" onclick="showPage('inicio')">
+            🏠<small>Inicio</small>
+        </button>
+        <button class="bnav-btn" id="bn-menu" onclick="showPage('menu')">
+            📋<small>Menú</small>
+        </button>
+        <button class="bnav-btn" id="bn-combos" onclick="showPage('combos')">
+            🔥<small>Combos</small>
+        </button>
+        <button class="bnav-btn" id="bn-carrito" onclick="showPage('carrito')">
+            🛒<small>Carrito</small>
+        </button>
+        <button class="bnav-btn" id="bn-contacto" onclick="showPage('contacto')">
+            📍<small>Contacto</small>
+        </button>
+    </nav>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast hidden"></div>
+
+</div>
+
+<script>
+/* =============================================
+PLAN NINJA EMPANADA - APP JS
+============================================= */
+// ---- STATE ----
+let cart = [];
+let sidebarOpen = false;
+
+// ---- SPLASH ----
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const splash = document.getElementById('splash');
+        const app = document.getElementById('app');
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.style.display = 'none';
+            app.classList.remove('hidden');
+            checkHorario();
+        }, 600);
+    }, 2200);
+});
+
+// ---- NAVIGATION ----
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+    const page = document.getElementById('page-' + pageId);
+    if (page) page.classList.add('active');
+    const bnav = document.getElementById('bn-' + pageId);
+    if (bnav) bnav.classList.add('active');
+    if (sidebarOpen) toggleSidebar();
+    window.scrollTo(0, 0);
+    if (pageId === 'carrito') renderCartPage();
+}
+
+// ---- SIDEBAR ----
+function toggleSidebar() {
+    sidebarOpen = !sidebarOpen;
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    sidebar.classList.toggle('open', sidebarOpen);
+    overlay.classList.toggle('hidden', !sidebarOpen);
+}
+
+// ---- CART ----
+function addToCart(name, price) {
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ name, price, qty: 1 });
+    }
+    updateCartUI();
+    showToast('✅ ' + name + ' agregado al carrito!');
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+    renderCartPage();
+}
+
+function changeQty(index, delta) {
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+    }
+    updateCartUI();
+    renderCartPage();
+}
+
+function clearCart() {
+    if (confirm('¿Vaciar el carrito?')) {
+        cart = [];
+        updateCartUI();
+        renderCartPage();
+    }
+}
+
+function updateCartUI() {
+    const total = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('cart-count').textContent = total;
+}
+
+function renderCartPage() {
+    const emptyEl = document.getElementById('cart-empty');
+    const contentEl = document.getElementById('cart-content');
+    const itemsEl = document.getElementById('cart-items');
+    if (cart.length === 0) {
+        emptyEl.classList.remove('hidden');
+        contentEl.classList.add('hidden');
+        return;
+    }
+    emptyEl.classList.add('hidden');
+    contentEl.classList.remove('hidden');
+    itemsEl.innerHTML = '';
+    let subtotal = 0;
+    cart.forEach((item, i) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <div class="cart-item-name">🥟 ${item.name}</div>
+            <div class="cart-item-qty">
+                <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
+                <span class="qty-val">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty(${i}, +1)">+</button>
+            </div>
+            <div class="cart-item-price">S/. ${itemTotal.toFixed(2)}</div>
+            <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+        `;
+        itemsEl.appendChild(div);
+    });
+    document.getElementById('subtotal').textContent = 'S/. ' + subtotal.toFixed(2);
+    document.getElementById('total-price').textContent = 'S/. ' + subtotal.toFixed(2);
+}
+
+function showCheckout() {
+    if (cart.length === 0) return;
+    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0).toFixed(2);
+    let msg = ' NUEVO PEDIDO - Plan Ninja Empanada\n\n';
+    cart.forEach(item => {
+        msg += `• ${item.qty}x ${item.name} - S/. ${(item.price * item.qty).toFixed(2)}\n`;
+    });
+    msg += `\n💰 *TOTAL: S/. ${total}*\n`;
+    msg += '\n Por favor indícame tu dirección de entrega. ¡Gracias!';
+    const url = 'https://wa.me/51996989580?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+}
+
+// ---- MENU FILTER ----
+function filterMenu(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.menu-card').forEach(card => {
+        if (cat === 'todos' || card.dataset.cat === cat) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// ---- TOAST ----
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.remove('hidden');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+    }, 2500);
+}
+
+// ---- HORARIO ----
+function checkHorario() {
+    const badge = document.getElementById('status-badge');
+    if (!badge) return;
+    const now = new Date();
+    const hour = now.getHours();
+    const isSaturday = now.getDay() === 6;
+    const isOpen = isSaturday && hour >= 9 && hour < 17;
+    if (isOpen) {
+        badge.textContent = ' ABIERTO AHORA';
+        badge.className = 'status-badge status-open';
+    } else {
+        badge.textContent = '🔴 CERRADO';
+        badge.className = 'status-badge status-closed';
+    }
+}
+</script>
+
+</body>
+</html>
